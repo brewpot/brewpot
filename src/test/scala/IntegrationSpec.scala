@@ -14,15 +14,12 @@ class IntegrationSpec extends HttpHarness with Specification {
   "This is a specification to check if the front end " +
     "resources are available and returning viewable data"   ^
                                                             p^
-    "The server should listen to the following resources"   ^
+    "The server should listen on the following resources"   ^
       "/"                                                   ! _Ok("") ^
       "/recipes"                                            ! _Ok("recipes") ^
-      "/login"                                              ! _Ok("login") ^
-      "/about"                                              ! _Ok("about") ^
                                                             p^
-    "The server should fail on not defined resources"       ^
+    "The server should fail on undefined resources"       ^
       "/foo"                                                ! _NotFound("foo") ^
-      "/login/some"                                         ! _NotFound("login/some")^
                                                             end
 
 

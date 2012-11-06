@@ -5,13 +5,25 @@ import unfiltered.response.Html5
 
 object Snippets {
 
-  def bootstrap(title: String, body: NodeSeq) = {
+  def header(text: String) =
+    <div class="page-header">
+      <h1>{text}</h1>
+    </div>
+
+  val nav =
+    <ul class="nav">
+      <li><a href="/recipes">Recipes</a></li>
+    </ul>
+
+  def bootstrap(title: String, body: NodeSeq) =
     Html5(
       <html>
         <head>
           <title>
             {title}
           </title>
+          <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+          <link href="/css/bootstrap-responsive.css" rel="stylesheet"/>
           <link href="/css/bootstrap.min.css" rel="stylesheet"/>
         </head>
         <body>
@@ -20,6 +32,7 @@ object Snippets {
               <a class="brand" href="/">
                 Brewpot!
               </a>
+              {nav}
             </div>
           </div>
           <div class="container">
@@ -30,6 +43,5 @@ object Snippets {
         </body>
       </html>
     )
-  }
 
 }

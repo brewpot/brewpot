@@ -14,5 +14,4 @@ object JettyRunner extends App {
   }
 
   start
-
 }

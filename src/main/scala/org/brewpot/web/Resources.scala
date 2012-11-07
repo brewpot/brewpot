@@ -8,7 +8,7 @@ object Resources extends Plan {
 
   def intent = {
     case r@Path(Seg(Nil)) => MainService.main
-    case r@Path(Seg("recipes" :: Nil)) => RecipeService.recipe
+    case r@Path(Seg("recipes" :: Nil)) => RecipeService.recipes
   }
 
 }

@@ -5,7 +5,7 @@ import org.brewpot.models.Brew
 
 object RecipeService {
 
-  def recipe = {
+  def recipes = {
     val bs = Seq(
       Brew("0", "Underyul", "Dobbelbock", 1.080, 7.62, 60, 40, "kareblak"),
       Brew("1", "Overyul", "Special Yul", 1.080, 7.62, 60, 40, "kareblak"),

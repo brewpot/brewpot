@@ -16,8 +16,9 @@ object Views {
   def recipes(brews: Seq[Brew]) = bootstrap(
     "Recipes",
     header("Recipes") ++
+      <p>{recipebar}</p>
       <table class="table table-striped table-bordered table-hover">
-        <tr>
+        <tr class="strong">
           <td>Id</td>
           <td>Name</td>
           <td>Style</td>

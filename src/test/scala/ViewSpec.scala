@@ -13,7 +13,7 @@ class ViewSpec extends Specification {
       nodes must \\("td") \> b1.name
       nodes must \\("td") \> b1.style
       nodes must \\("td") \> b1.OG.toString
-      nodes must \\("td") \> (b1.ABV + " %")
+      nodes must \\("td") \> "%s %%".format(b1.ABV)
       nodes must \\("td") \> b1.EBC.toString
       nodes must \\("td") \> b1.IBU.toString
       nodes must \\("td") \> b1.user

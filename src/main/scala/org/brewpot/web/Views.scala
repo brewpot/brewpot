@@ -28,7 +28,7 @@ object Views {
           <td>IBU</td>
           <td>Brewer</td>
         </tr>
-        {brews.map(x =>
+        {brews.sortBy(-_.id.toInt).map(x =>
         <tr>
           <td>{x.id}</td>
           <td>{x.name}</td>

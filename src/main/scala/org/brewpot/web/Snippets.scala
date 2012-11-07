@@ -12,7 +12,7 @@ object Snippets {
       </h1>
     </div>
 
-  val nav =
+  def nav =
     <ul class="nav">
       <li>
         <a href="/recipes">Recipes</a>

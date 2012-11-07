@@ -22,6 +22,8 @@ object Snippets {
           <title>
             {title}
           </title>
+          <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+          <link href="/css/bootstrap-responsive.css" rel="stylesheet"/>
           <link href="/css/bootstrap.min.css" rel="stylesheet"/>
         </head>
         <body>
@@ -36,6 +38,11 @@ object Snippets {
           <div class="container">
             {body}
           </div>
+          <footer class="footer">
+            <div class="container">
+              <p class="pull-right"><a href="#">To the top</a></p>
+            </div>
+          </footer>
           <script src="http://code.jquery.com/jquery-latest.js"></script>
           <script src="/js/bootstrap.min.js"></script>
         </body>

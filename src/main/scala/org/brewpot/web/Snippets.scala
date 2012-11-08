@@ -21,11 +21,11 @@ object Snippets {
 
   def recipebar =
     <div class="container navbar">
-        <ul class="nav">
-          <li class="btn"><i class="icon-plus"/> Add recipe</li>
-        </ul>
-        <form class="navbar-search pull-left">
-          <input type="text" class="search-query" placeholder="Filter &lt;on any attribute!&gt;"/>
+        <a href="/recipes" class="btn">
+          <i class="icon-plus"/> Add recipe
+        </a>
+        <form class="navbar-search pull-right">
+          <input type="text" class="search-query" placeholder="Filter &lt;On any attribute&gt;"/>
         </form>
     </div>
 

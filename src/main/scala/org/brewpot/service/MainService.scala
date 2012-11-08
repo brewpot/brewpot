@@ -6,6 +6,6 @@ import javax.servlet.http.HttpServletRequest
 
 object MainService {
 
-  def main(r: HttpRequest[HttpServletRequest]) = Views.main
+  def main = Views.main
 
 }

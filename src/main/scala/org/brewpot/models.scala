@@ -2,6 +2,6 @@ package org.brewpot
 
 object models {
 
-  case class Brew(id: String, name: String, style: String, OG: Double, ABV: Double, EBC: Int, IBU: Int, user: String)
+  case class Recipe(id: String, name: String, style: Option[String], OG: Option[Double], ABV: Option[Double], EBC: Option[Int], IBU: Option[Int], user: String)
 
 }

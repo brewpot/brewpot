@@ -13,30 +13,30 @@ object Views {
         <p>But I must explain to you how all this mistaken idea of denouncing pleasure and praising pain was born and I will give you a complete account of the system, and expound the actual teachings of the great explorer of the truth, the master-builder of human happiness. No one rejects, dislikes, or avoids pleasure itself, because it is pleasure, but because those who do not know how to pursue pleasure rationally encounter consequences that are extremely painful. Nor again is there anyone who loves or pursues or desires to obtain pain of itself, because it is pain, but because occasionally circumstances occur in which toil and pain can procure him some great pleasure. To take a trivial example, which of us ever undertakes laborious physical exercise, except to obtain some advantage from it? But who has any right to find fault with a man who chooses to enjoy a pleasure that has no annoying consequences, or one who avoids a pain that produces no resultant pleasure?</p>
   )
 
-  def recipes(brews: Seq[Brew]) = bootstrap(
+  def recipes(brews: Seq[Recipe]) = bootstrap(
     "Recipes",
     header("Recipes") ++
       <p>{recipebar}</p>
       <table class="table table-striped table-bordered table-hover">
-        <tr class="strong">
-          <td>Id</td>
-          <td>Name</td>
-          <td>Style</td>
-          <td>OG</td>
-          <td>ABV</td>
-          <td>EBC</td>
-          <td>IBU</td>
-          <td>Brewer</td>
-        </tr>
+        <thead>
+            <th>Id</th>
+            <th>Name</th>
+            <th>Style</th>
+            <th>OG</th>
+            <th>ABV</th>
+            <th>EBC</th>
+            <th>IBU</th>
+            <th>Brewer</th>
+        </thead>
         {brews.sortBy(-_.id.toInt).map(x =>
         <tr>
           <td>{x.id}</td>
           <td>{x.name}</td>
-          <td>{x.style}</td>
-          <td>{x.OG}</td>
-          <td>{x.ABV} %</td>
-          <td>{x.EBC}</td>
-          <td>{x.IBU}</td>
+          <td>{x.style.getOrElse("-")}</td>
+          <td>{x.OG.getOrElse(0)}</td>
+          <td>{x.ABV.getOrElse(0)} %</td>
+          <td>{x.EBC.getOrElse(0)}</td>
+          <td>{x.IBU.getOrElse(0)}</td>
           <td>{x.user}</td>
         </tr>)}
       </table>

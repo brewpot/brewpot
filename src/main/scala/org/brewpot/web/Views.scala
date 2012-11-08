@@ -16,6 +16,7 @@ object Views {
   def recipes(brews: Seq[Recipe]) = bootstrap(
     "Recipes",
     header("Recipes") ++
+      addRecipeModal ++
       <p>{recipebar}</p>
       <table class="table table-striped table-bordered table-hover">
         <thead>
@@ -29,7 +30,7 @@ object Views {
             <th>Brewer</th>
         </thead>
         {brews.sortBy(-_.id.toInt).map(x =>
-        <tr>
+        <tr onclick="input" data-toggle="modal" href="#addRecipeModal">
           <td>{x.id}</td>
           <td>{x.name}</td>
           <td>{x.style.getOrElse("-")}</td>
@@ -38,7 +39,8 @@ object Views {
           <td>{x.EBC.getOrElse(0)}</td>
           <td>{x.IBU.getOrElse(0)}</td>
           <td>{x.user}</td>
-        </tr>)}
+        </tr>
+        )}
       </table>
   )
 

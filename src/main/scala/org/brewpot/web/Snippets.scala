@@ -21,12 +21,46 @@ object Snippets {
 
   def recipebar =
     <div class="container navbar">
-        <a href="/recipes" class="btn">
+        <a href="#addRecipeModal" class="btn" role="button" data-toggle="modal">
           <i class="icon-plus"/> Add recipe
         </a>
         <form class="navbar-search pull-right">
           <input type="text" class="search-query" placeholder="Filter &lt;On any attribute&gt;"/>
         </form>
+    </div>
+
+  def addRecipeModal =
+    <div id="addRecipeModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="addRecipeModalLabel" aria-hidden="true">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h3 id="addRecipeModal">New recipe</h3>
+      </div>
+      <div class="modal-body">
+        <form class="form-horizontal">
+          <div class="control-group">
+            <label class="control-label" for="name">Name</label>
+            <div class="controls">
+              <input type="text" id="inputName" placeholder="&lt;Bitches' Brew&gt;"/>
+            </div>
+          </div>
+          <div class="control-group">
+            <label class="control-label" for="style">Beer style</label>
+            <div class="controls">
+              <select>
+                <option>1A American Lager</option>
+                <option>2A German Bock</option>
+                <option>3D English Pale Ale</option>
+                <option>4C Asian Lager</option>
+                <option>5E Dry Stout</option>
+              </select>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer control-group">
+        <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+        <button class="btn btn-primary" data-loading-text="Saving...">Save</button>
+      </div>
     </div>
 
   def bootstrap(title: String, body: NodeSeq) =

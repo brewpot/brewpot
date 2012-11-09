@@ -40,7 +40,7 @@ object Snippets {
           <div class="control-group">
             <label class="control-label" for="name">Name</label>
             <div class="controls">
-              <input type="text" id="inputName" placeholder="&lt;Bitches' Brew&gt;"/>
+              <input type="text" id="inputName" placeholder="E.g. Bitches Brew"/>
             </div>
           </div>
           <div class="control-group">

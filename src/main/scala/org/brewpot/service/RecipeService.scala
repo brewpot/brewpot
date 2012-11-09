@@ -1,10 +1,12 @@
 package org.brewpot.service
 
-import org.brewpot.web.Views
+import org.brewpot.web.{QueryParams, Views}
 import org.brewpot.models.Recipe
 import unfiltered.request.{Params, HttpRequest}
+import unfiltered.request.QParams._
 import javax.servlet.http.HttpServletRequest
 import unfiltered.response.BadRequest
+import com.ning.http.client.consumers.AppendableBodyConsumer
 
 object RecipeService {
 
@@ -31,22 +33,29 @@ object RecipeService {
 
   /**
    * Temporary stuff
+   *
+   * Fix this shit
    */
   def addRecipe(r: HttpRequest[HttpServletRequest]) = {
     r match {
       case Params(ps) => {
-        val m = ps.map(p => (p._1, p._2.head))
+        val m = QueryParams(ps)
+        val expected = for {
+          id <- lookup("id").is(trimmed).is(required("id is required"))
+          name <- lookup("name").is(trimmed).is(required("name is required"))
+          style <- lookup("style").is(trimmed)
+          OG <- lookup("OG").is(trimmed).is(watch(Params.double, e => "'OG' %s should be a comma separated double".format(e)))
+          ABV <- lookup("ABV").is(trimmed).is(double(e => "'OG' %s should be a comma separated double".format(e)))
+        } yield Recipe("","",Some(""),Some(1.1),Some(1.1),Some(1),Some(1),"")
+
         Views.recipes(Recipe(
-          m("id"), m("name"), m("style"), m("OG"), m("ABV"), m("EBC"), m("IBU"), m("user")
+          m.first("id").get, m.first("name").get, m.first("style"), m.firstDouble("OG"), m.firstDouble("ABV"), m.firstInt("EBC"), m.firstInt("IBU"), m.first("user").get
         ) +: fetchRecipes)
       }
       case _ => BadRequest
     }
   }
 
-  implicit val convDouble = convOption[Double](_.toDouble)_
-  implicit val convInt = convOption[Int](_.toInt)_
-  implicit val convString = convOption[String](_.toString)_
-  def convOption[T](f: String => T)(s: String) = try { Some(f(s)) } catch { case _ => None }
-}
+  def double[E](e: String => E) = watch(Params.double, e)
 
+}

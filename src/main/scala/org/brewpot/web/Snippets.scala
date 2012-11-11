@@ -12,12 +12,28 @@ object Snippets {
       </h1>
     </div>
 
-  def nav =
+  def nav = {
+    val loggedIn = false
     <ul class="nav">
       <li>
         <a href="/recipes">Recipes</a>
       </li>
     </ul>
+    <ul class="nav pull-right">
+      <li class="dropdown">
+        { loggedIn match {
+          case false =>
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Login <b class="caret"></b></a>
+              <ul class="dropdown-menu">
+                <li><a href="/login"><img src="/img/twitter-bird-16x16.png" class="img-rounded"/> Sign in with Twitter</a></li>
+              </ul>
+          case true =>
+            <a href="logout">Logout</a>
+          }
+        }
+      </li>
+    </ul>
+  }
 
   def recipebar =
     <div class="container navbar">

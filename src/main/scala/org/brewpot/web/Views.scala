@@ -29,17 +29,17 @@ object Views {
             <th>IBU</th>
             <th>Brewer</th>
         </thead>
-        {brews.sortBy(-_.id.toInt).map(x =>
-        <tr onclick="input" data-toggle="modal" href="#addRecipeModal">
-          <td>{x.id}</td>
-          <td>{x.name}</td>
-          <td>{x.style.getOrElse("-")}</td>
-          <td>{x.OG.getOrElse(0)}</td>
-          <td>{x.ABV.getOrElse(0)} %</td>
-          <td>{x.EBC.getOrElse(0)}</td>
-          <td>{x.IBU.getOrElse(0)}</td>
-          <td>{x.user}</td>
-        </tr>
+        {brews.sortBy(-_.id.getOrElse("0").toInt).map(x =>
+          <tr onclick="input" data-toggle="modal" href="#addRecipeModal">
+            <td>{x.id.getOrElse("-")}</td>
+            <td>{x.name}</td>
+            <td>{x.style.getOrElse("-")}</td>
+            <td>{x.OG.getOrElse(0)}</td>
+            <td>{x.ABV.getOrElse(0)} %</td>
+            <td>{x.EBC.getOrElse(0)}</td>
+            <td>{x.IBU.getOrElse(0)}</td>
+            <td>{x.user}</td>
+          </tr>
         )}
       </table>
   )

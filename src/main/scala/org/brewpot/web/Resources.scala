@@ -3,23 +3,19 @@ package org.brewpot.web
 import unfiltered.filter.Plan
 import unfiltered.request._
 import org.brewpot.handlers._
-import unfiltered.response.{ResponseString, Ok}
-import scala.Either
-import dispatch.Promise
+import unfiltered.response.Ok
+import org.scribe.builder.api.TwitterApi
 
 object Resources extends Plan {
 
   def intent = {
-    case Path(Seg(Nil)) => MainPageHandler.main
+    case r @ Path(Seg(Nil)) => MainPageHandler.main
     case r @ Path(Seg("recipes" :: Nil)) => r match {
       case GET(_) => RecipeHandler.recipes
       case POST(_) => RecipeHandler.addRecipe(r)
     }
-    case Path(Seg("login" :: Nil)) => {
-      AuthHandler.login
-      Ok
-    }
-    case r @ Path(Seg("oauth2callback" :: Nil)) => AuthHandler.oauth2callback(r)
+    case r @ Path(Seg("auth" :: "login" :: Nil)) => AuthHandler.requestToken
+    case r @ Path(Seg("auth" :: "callback" :: Nil)) => AuthHandler.callback(r)
 
   }
 

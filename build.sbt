@@ -23,6 +23,7 @@ libraryDependencies ++=
     "net.databinder" %% "unfiltered" % "0.6.3",
     "net.databinder" %% "unfiltered-filter" % "0.6.3",
     "net.databinder" %% "unfiltered-jetty" % "0.6.3",
-    "net.databinder.dispatch" %% "dispatch-core" % "0.9.4",
-    "org.specs2" %% "specs2" % "1.12.2" % "test"
+    "net.databinder.dispatch" %% "dispatch-core" % "0.9.4" % "test",
+    "org.specs2" %% "specs2" % "1.12.2" % "test",
+    "org.scribe" % "scribe" % "1.3.2"
   )

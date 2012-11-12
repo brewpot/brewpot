@@ -25,7 +25,7 @@ object Snippets {
           case false =>
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">Login <b class="caret"></b></a>
               <ul class="dropdown-menu">
-                <li><a href="/login"><img src="/img/twitter-bird-16x16.png" class="img-rounded"/> Sign in with Twitter</a></li>
+                <li><a href="/auth/login"><img src="/img/twitter-bird-16x16.png" class="img-rounded"/> Sign in with Twitter</a></li>
               </ul>
           case true =>
             <a href="logout">Logout</a>

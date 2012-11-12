@@ -1,15 +1,15 @@
 package org.brewpot.handlers
 
-import auth.Auth
+import auth.TwitterAuth
 import unfiltered.response.ResponseString
-import com.ning.http.client.oauth.RequestToken
+import unfiltered.request.HttpRequest
+import javax.servlet.http.HttpServletRequest
 
 object AuthHandler {
 
-    def login = {
-      var auth = new Auth("http://brewpot.org/login/callback")
-      ResponseString(auth.toString)
-    }
+    def login = new TwitterAuth("http://localhost:8888/login/oauth_callback").fetchRequestToken
+
+    def request_token_callback(r: HttpRequest[HttpServletRequest]) = ResponseString(r.underlying.toString)
 
 
 }

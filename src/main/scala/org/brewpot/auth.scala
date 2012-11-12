@@ -19,17 +19,23 @@ trait TwitterEndpoints extends oauth.SomeEndpoints {
 }
 
 trait TwitterConsumer extends SomeConsumer {
-  val consumer: ConsumerKey = new ConsumerKey("ZEKYzsa1kynwC7nGsJJ1ZA","yT1ACvrsvnSEu5dxcUZMPbbLJ2Ms6zph5uAfSwFZCs")
+  val consumer: ConsumerKey = new ConsumerKey("ZEKYzsa1kynwC7nGsJJ1ZA","")
 }
-//
-//class GoogleAuth(val callback: String) extends oauth.Exchange
-//with oauth.SomeCallback
-//with oauth.SomeHttp
-//with GoogleConsumer
-//with GoogleEndpoints {
-//  val http = dispatch.Http
-//}
-//
-//trait GoogleEndpoints extends oauth.SomeEndpoints {
-//  val consumer: ConsumerKey = new ConsumerKey()
-//}
+
+class GoogleAuth(val callback: String) extends oauth.Exchange
+with oauth.SomeCallback
+with oauth.SomeHttp
+with GoogleConsumer
+with GoogleEndpoints {
+  val http = dispatch.Http
+}
+
+trait GoogleConsumer extends oauth.SomeConsumer {
+  val requestToken = "https://accounts.google.com/o/oauth2/auth"
+  val accessToken  = "https://accounts.google.com/o/oauth2/auth"
+  val authorize    = "https://accounts.google.com/o/oauth2/auth"
+}
+
+trait GoogleEndpoints extends oauth.SomeEndpoints {
+  val consumer: ConsumerKey = new ConsumerKey("1059524886560.apps.googleusercontent.com", "")
+}

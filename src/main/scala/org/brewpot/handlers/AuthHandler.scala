@@ -1,15 +1,15 @@
 package org.brewpot.handlers
 
-import auth.TwitterAuth
+import auth.{GoogleAuth}
 import unfiltered.response.ResponseString
 import unfiltered.request.HttpRequest
 import javax.servlet.http.HttpServletRequest
 
 object AuthHandler {
 
-    def login = new TwitterAuth("http://localhost:8888/login/oauth_callback").fetchRequestToken
+    def login = new GoogleAuth("http://brewpot.herokuapp.com/oauth2callback").fetchRequestToken
 
-    def request_token_callback(r: HttpRequest[HttpServletRequest]) = ResponseString(r.underlying.toString)
+    def oauth2callback(r: HttpRequest[HttpServletRequest]) = ResponseString(r.underlying.toString)
 
 
 }

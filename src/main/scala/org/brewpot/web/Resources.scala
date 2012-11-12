@@ -19,7 +19,7 @@ object Resources extends Plan {
       AuthHandler.login
       Ok
     }
-    case r @ Path(Seg("login" :: "oauth_callback" :: Nil)) => AuthHandler.request_token_callback(r)
+    case r @ Path(Seg("oauth2callback" :: Nil)) => AuthHandler.oauth2callback(r)
 
   }
 

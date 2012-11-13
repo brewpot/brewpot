@@ -18,7 +18,7 @@ class IntegrationSpec extends HttpHarness with Specification {
       "/"                                                   ! _Ok("") ^
       "/recipes"                                            ! _Ok("recipes") ^
                                                             p^
-    "The server should fail on undefined resources"       ^
+    "The server should fail on undefined resources"         ^
       "/foo"                                                ! _NotFound("foo") ^
                                                             end
 

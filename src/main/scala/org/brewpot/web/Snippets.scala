@@ -16,22 +16,18 @@ object Snippets {
     val loggedIn = false
     <ul class="nav">
       <li>
-        <a href="/recipes">Recipes</a>
+        <a href="/recipes"><i class="icon-th-list"/> Recipes</a>
       </li>
     </ul>
     <ul class="nav pull-right">
-      <li class="dropdown">
-        { loggedIn match {
-          case false =>
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Login <b class="caret"></b></a>
-              <ul class="dropdown-menu">
-                <li><a href="/auth/login"><img src="/img/twitter-bird-16x16.png" class="img-rounded"/> Sign in with Twitter</a></li>
-              </ul>
-          case true =>
-            <a href="logout">Logout</a>
-          }
-        }
-      </li>
+      <li class="btn-block"><a href="/auth/twitter/login"><img src="/img/twitter-bird-16x16.png"/> Login</a></li>
+      <!-- REMOVED DUE TO ONLY ONE LOGIN OPTION -->
+      <!--li class="dropdown">
+        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Login <b class="caret"></b></a>
+        <ul class="dropdown-menu" data-no-collapse="true">
+          <li><a href="/auth/twitter/login"><img src="/img/twitter-bird-16x16.png"/> Sign in with Twitter</a></li>
+        </ul>
+      </li-->
     </ul>
   }
 
@@ -86,17 +82,23 @@ object Snippets {
           <title>
             {title}
           </title>
-          <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+          <meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=1;" />
           <link href="/css/bootstrap.min.css" rel="stylesheet"/>
           <link href="/css/bootstrap-responsive.min.css" rel="stylesheet"/>
           <link href="/css/brewpot.css" rel="stylesheet"/>
         </head>
         <body>
-          <div class="navbar">
+          <div class="navbar" data-toggle="collapse" data-target=".nav-collapse">
             <div class="navbar-inner">
+              <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </a>
               <a class="brand" href="/">
                 Brewpot!
-              </a>{nav}
+              </a>
+              <div class="nav-collapse collapse">{nav}</div>
             </div>
           </div>
           <div class="container">

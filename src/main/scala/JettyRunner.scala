@@ -1,5 +1,5 @@
 import java.io.File
-import org.brewpot.web.Resources
+import org.brewpot.plan
 import util.Properties
 
 object JettyRunner extends App {
@@ -9,7 +9,7 @@ object JettyRunner extends App {
   def start = {
     unfiltered.jetty.Http(port)
       .resources(new File("src/main/resources").toURI.toURL)
-      .filter(Resources)
+      .filter(plan)
       .start
   }
 

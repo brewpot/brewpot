@@ -20,24 +20,24 @@ object Views {
       <p>{recipebar}</p>
       <table class="table table-striped table-bordered table-hover">
         <thead>
-            <th>Id</th>
+            <th class="hidden-phone">Id</th>
             <th>Name</th>
             <th>Style</th>
             <th>OG</th>
-            <th>ABV</th>
-            <th>EBC</th>
-            <th>IBU</th>
+            <th class="hidden-phone">ABV</th>
+            <th class="hidden-phone">EBC</th>
+            <th class="hidden-phone">IBU</th>
             <th>Brewer</th>
         </thead>
         {brews.sortBy(-_.id.getOrElse("0").toInt).map(x =>
           <tr onclick="input" data-toggle="modal" href="#addRecipeModal">
-            <td>{x.id.getOrElse("-")}</td>
+            <td class="hidden-phone">{x.id.getOrElse("-")}</td>
             <td>{x.name}</td>
             <td>{x.style.getOrElse("-")}</td>
             <td>{x.OG.getOrElse(0)}</td>
-            <td>{x.ABV.getOrElse(0)} %</td>
-            <td>{x.EBC.getOrElse(0)}</td>
-            <td>{x.IBU.getOrElse(0)}</td>
+            <td class="hidden-phone">{x.ABV.getOrElse(0)} %</td>
+            <td class="hidden-phone">{x.EBC.getOrElse(0)}</td>
+            <td class="hidden-phone">{x.IBU.getOrElse(0)}</td>
             <td>{x.user}</td>
           </tr>
         )}

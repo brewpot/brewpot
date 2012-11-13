@@ -7,3 +7,12 @@
 .strong {
     font-weight: bold;
 }
+
+.nav .dropdown ul {
+    display: none;
+}
+
+.nav .open ul {
+    display: block;
+    height: auto;
+}

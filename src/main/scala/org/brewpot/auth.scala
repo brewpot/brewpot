@@ -2,14 +2,12 @@ package org.brewpot
 
 import unfiltered.request.QParams._
 import unfiltered.request._
-import unfiltered.response.{NotFound, ResponseString, BadRequest, Redirect}
+import unfiltered.response.BadRequest
 import org.scribe.model.{Token, Verifier}
 import org.scribe.oauth.OAuthService
 import util.Properties
 import org.scribe.builder.ServiceBuilder
 import org.scribe.builder.api.TwitterApi
-import javax.management.remote.rmi._RMIConnection_Stub
-import dispatch.host
 import unfiltered.response.Redirect
 import unfiltered.response.ResponseString
 

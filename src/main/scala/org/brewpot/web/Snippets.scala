@@ -12,8 +12,7 @@ object Snippets {
       </h1>
     </div>
 
-  def nav = {
-    val loggedIn = false
+  def nav(auth: Boolean) = {
     <ul class="nav">
       <li>
         <a href="/recipes"><i class="icon-th-list"/> Recipes</a>
@@ -37,7 +36,7 @@ object Snippets {
           <i class="icon-plus"/> Add recipe
         </a>
         <form class="navbar-search pull-right">
-          <input type="text" class="search-query" placeholder="Filter &lt;On any attribute&gt;"/>
+          <input type="text" class="search-query" placeholder="Filter"/>
         </form>
     </div>
 
@@ -75,7 +74,7 @@ object Snippets {
       </div>
     </div>
 
-  def bootstrap(title: String, body: NodeSeq) =
+  def bootstrap(title: String, body: NodeSeq, auth: Boolean) =
     Html5(
       <html>
         <head>
@@ -98,7 +97,7 @@ object Snippets {
               <a class="brand" href="/">
                 Brewpot!
               </a>
-              <div class="nav-collapse collapse">{nav}</div>
+              <div class="nav-collapse collapse">{nav(auth)}</div>
             </div>
           </div>
           <div class="container">

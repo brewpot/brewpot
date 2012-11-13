@@ -8,7 +8,7 @@ import org.brewpot.auth.{TwitterDetails, Auth}
 object plan extends Plan {
 
   def intent = {
-    case req @ Path(Seg(Nil)) => MainPageHandler.main
+    case req @ Path(Seg(Nil)) => MainPageHandler.main(req)
     case req @ Path(Seg("recipes" :: Nil)) => req match {
       case GET(_) => RecipeHandler.recipes
       case POST(_) => RecipeHandler.addRecipe(req)

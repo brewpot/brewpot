@@ -6,6 +6,7 @@ import unfiltered.request.{Params, HttpRequest}
 import unfiltered.request.QParams._
 import javax.servlet.http.HttpServletRequest
 import unfiltered.response.{ResponseString, ResponseFunction, BadRequest}
+import auth._
 
 object handlers {
 
@@ -17,7 +18,7 @@ object handlers {
     def fetchRecipes = Seq(
       Recipe(Some("0"), "Underyul", Option("Dobbelbock"), Option(1.080), Option(7.62), Option(60), Option(40), "kareblak"),
       Recipe(Some("1"), "Overyul", Option("Dobbelbock"), Option(1.080), Option(7.62), Option(60), Option(40), "kareblak"),
-      Recipe(Some("2"), "Obama Honey Ale", Option("Dobbelbock"), Option(1.080), Option(7.62), Option(60), Option(40), "obama"),
+      Recipe(Some("2"), "ObamaHoneyAleXXXXxxxxXXXXxx", Option("Dobbelbock"), Option(1.280), Option(14.0), Option(60), Option(40), "obama"),
       Recipe(Some("3"), "Mjød", Option("Dobbelbock"), Option(1.080), Option(7.62), Option(60), Option(40), "kareblak"),
       Recipe(Some("4"), "Underyul", Option("Dobbelbock"), Option(1.080), Option(7.62), Option(60), Option(40), "kareblak"),
       Recipe(Some("5"), "Overyul", Option("Dobbelbock"), Option(1.080), Option(7.62), Option(60), Option(40), "kareblak"),
@@ -64,7 +65,7 @@ object handlers {
 
   object MainPageHandler {
 
-    def main = Views.main
+    def main(req: HttpRequest[_]) = Views.main(false)
 
   }
 

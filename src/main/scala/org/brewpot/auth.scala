@@ -63,4 +63,6 @@ object auth {
   def property(envVar: String) = Properties.envOrNone(envVar)
     .getOrElse(throw new IllegalArgumentException("Missing env variable for %s".format(envVar)))
 
+  implicit def auth(req: HttpRequest[_]) = false
+
 }

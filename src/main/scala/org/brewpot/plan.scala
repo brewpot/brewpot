@@ -13,7 +13,7 @@ object plan extends Plan {
       case GET(_) => RecipeHandler.recipes
       case POST(_) => RecipeHandler.addRecipe(req)
     }
-    case req @ Path(Seg("auth" :: "twitter" :: "login" :: Nil)) => Auth.authToken(TwitterDetails)
+    case req @ Path(Seg("auth" :: "twitter" :: "login" :: Nil)) => Auth.authToken(req, TwitterDetails)
     case req @ Path(Seg("auth" :: "twitter" :: "callback" :: Nil)) => Auth.callback(req, TwitterDetails)
 
   }

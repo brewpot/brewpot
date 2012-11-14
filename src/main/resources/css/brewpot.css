@@ -18,6 +18,6 @@
 }
 
 .nav img {
-    margin-top: -2px;
+    vertical-align: text-bottom;
     max-height: 18px;
 }

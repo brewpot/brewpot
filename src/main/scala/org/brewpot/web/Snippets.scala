@@ -25,7 +25,7 @@ object snippets {
         case Some(u) => {
           <li class="dropdown">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-              <img src={ u.avatar.getOrElse("") } /> { u.name.getOrElse(u.username) } <b class="caret"></b>
+              <img src={ u.avatar.getOrElse("") }/>  { u.name.getOrElse(u.username) } <b class="caret"></b>
             </a>
             <ul class="dropdown-menu" data-no-collapse="true">
               <li>
@@ -44,13 +44,6 @@ object snippets {
           </li>
        }
     }
-      <!-- REMOVED DUE TO ONLY ONE LOGIN OPTION -->
-      <!--li class="dropdown">
-        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Login <b class="caret"></b></a>
-        <ul class="dropdown-menu" data-no-collapse="true">
-          <li><a href="/auth/twitter/login"><img src="/img/twitter-bird-16x16.png"/> Sign in with Twitter</a></li>
-        </ul>
-      </li-->
     </ul>
   }
 
@@ -107,7 +100,7 @@ object snippets {
           <title>
             {title}
           </title>
-          <meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=1;" />
+          <meta name="viewport" content="width=device-width; initial-scale=1.0;" />
           <link href="/css/bootstrap.min.css" rel="stylesheet"/>
           <link href="/css/bootstrap-responsive.min.css" rel="stylesheet"/>
           <link href="/css/brewpot.css" rel="stylesheet"/>
@@ -127,6 +120,11 @@ object snippets {
             </div>
           </div>
           <div class="container">
+            <div class="alert">
+              This page is currently being implemented. Any added data will not be stored.
+              If you want to hack the shit out of it, please do, and tell me what I got wrong
+              by adding an issue on <a href="http://github.com/brewpot/brewpot">github</a>. Thanks!
+            </div>
             {body}
           </div>
           <footer class="footer">

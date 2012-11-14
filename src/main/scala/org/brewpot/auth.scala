@@ -3,22 +3,20 @@ package org.brewpot
 import unfiltered.request.QParams._
 import unfiltered.request._
 import unfiltered.response._
-import org.scribe.model.{Verb, OAuthRequest, Token, Verifier}
+import unfiltered.Cookie
+
+import org.scribe.model._
 import org.scribe.oauth.OAuthService
-import util.Properties
 import org.scribe.builder.ServiceBuilder
 import org.scribe.builder.api.TwitterApi
 import collection.mutable
-import net.liftweb.json.parse
-import jsonpicklers._
-import org.brewpot.models.User
-import web.Views
-import unfiltered.Cookie
-import org.brewpot.extractors.{SessionToken, UserWithToken}
-import unfiltered.response.Redirect
-import scala.Some
 import jsonpicklers.Success
-import unfiltered.Cookie
+import net.liftweb.json.parse
+
+import web.views
+import org.brewpot.models._
+import org.brewpot.common.EnvProperty
+import org.brewpot.extractors.SessionToken
 
 object auth {
 
@@ -37,8 +35,8 @@ object auth {
     def callback(req: HttpRequest[_]) = req match {
       case Params(ps) => {
         val expected = for {
-          oauth_token <- lookup("oauth_token") is trimmed is required("The oauth_token is missing")
-          oauth_verifier <- lookup("oauth_verifier") is trimmed is required("The oauth_verifier is missing")
+          oauth_token <- lookup("oauth_token")        is trimmed is required("The oauth_token is missing")
+          oauth_verifier <- lookup("oauth_verifier")  is trimmed is required("The oauth_verifier is missing")
         } yield (oauth_token, oauth_verifier)
         expected(ps).fold(
           err => accessTokenFailed("Failed to login"),
@@ -48,55 +46,46 @@ object auth {
           }
         )
       }
-      case _ => Views.main(None, Some("Missing OAuth params"))
+      case _ => views.main(None, Some("Missing OAuth params"))
     }
 
     def logout(req: HttpRequest[_]) = req match {
       case SessionToken(token) => {
-        setTokenCookie("")
+        applyCookie("")
         tokenStore -= token
         Redirect("/")
       }
-      case _ => Unauthorized
+      case _ => Unauthorized ~> views.main
     }
 
-    private def accessTokenFailed(err: String) = Views.main(None, Some(err))
+    private def accessTokenFailed(err: String) = views.main(None, Some(err))
 
     private def accessToken(req: HttpRequest[_], auth: (Option[String], Option[String])) =
       details.svc.getAccessToken(details.token(auth._1.get), new Verifier(auth._2.get))
 
-    private def setTokenCookie(value: String) =
+    private def applyCookie(value: String) =
       SetCookies(Cookie(name = "user.token", value = value, path = Some("/"))) ~> Redirect("/")
 
     private def verifyToken(token: Token) = {
+      // TODO: Address needs to be generic
       val request = new OAuthRequest(Verb.GET, "https://api.twitter.com/1/account/verify_credentials.json")
       details.svc.signRequest(token, request)
       val response = request.send()
       val parsed = parse(response.getBody)
-      val Success(p, _) = User.json.unpickle(parsed)
+      // TODO: Needs to be generic, type User
+      val Success(p, _) = TwitterUser.json.unpickle(parsed)
       tokenStore += (token.getToken -> p)
-      setTokenCookie(token.getToken)
+      applyCookie(token.getToken)
     }
-
   }
 
   trait ServiceDetails extends EnvProperty {
     protected def key: String
-
     protected def secret: String
-
     def svc(callback: String): OAuthService
-
     def svc: OAuthService
-
     def token(token: String): Token = new Token(token, secret)
-
     def callback(base: String): String
-  }
-
-  trait EnvProperty {
-    def property(property: String) = Properties.envOrNone(property)
-      .getOrElse(throw new IllegalArgumentException("Missing env variable for %s".format(property)))
   }
 
   object TwitterDetails extends ServiceDetails {

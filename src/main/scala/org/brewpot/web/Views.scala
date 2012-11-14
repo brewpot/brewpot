@@ -1,11 +1,11 @@
 package org.brewpot.web
 
-import Snippets._
+import snippets._
 import org.brewpot.models._
 import xml.NodeSeq
 import unfiltered.response.Html5
 
-object Views {
+object views {
 
   def main(user: Option[User], alert: Option[String]): Html5 = {
     bootstrap(
@@ -34,9 +34,9 @@ object Views {
   def recipes(user: Option[User])(brews: Seq[Recipe]): Html5 = bootstrap(
     "Recipes",
     header("Recipes") ++
-      addRecipeModal ++
+      { if (user.isDefined) addRecipeModal else Nil } ++
       <p>
-        {recipebar}
+        { recipebar(user.isDefined) }
       </p>
         <table class="table table-striped table-bordered table-hover">
           <thead>

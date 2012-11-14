@@ -16,3 +16,8 @@
     display: block;
     height: auto;
 }
+
+.nav img {
+    margin-top: -2px;
+    max-height: 18px;
+}

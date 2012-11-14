@@ -1,13 +1,15 @@
 package org.brewpot
 
-import org.brewpot.web.Views
-import org.brewpot.models.Recipe
+import org.brewpot.web.views
+import org.brewpot.models.{User, Recipe}
 import unfiltered.request.{Params, HttpRequest}
 import unfiltered.request.QParams._
 import javax.servlet.http.HttpServletRequest
-import unfiltered.response.{ResponseString, ResponseFunction, BadRequest}
-import auth._
+import unfiltered.response._
 import org.brewpot.extractors.UserWithToken
+import util.control.Exception._
+import scala.Some
+import unfiltered.response.ResponseString
 
 object handlers {
 
@@ -31,8 +33,8 @@ object handlers {
       Recipe(Some("11"), "Mjød", Option("Dobbelbock"), Option(1.080), Option(7.62), Option(60), Option(40), "kareblak"))
 
     def recipes(req: HttpRequest[_]) = req match {
-      case UserWithToken(user) => Views.recipes(user)(fetchRecipes)
-      case _ => Views.recipes(None)(fetchRecipes)
+      case UserWithToken(user) => views.recipes(user)(fetchRecipes)
+      case _ => views.recipes(None)(fetchRecipes)
     }
 
     /**
@@ -40,27 +42,32 @@ object handlers {
      *
      * Fix this shit
      */
-    def addRecipe(r: HttpRequest[HttpServletRequest]): ResponseFunction[Any] = {
+    def addRecipe(req: HttpRequest[HttpServletRequest]): ResponseFunction[Any] = {
       def double[E](e: String => E) = watch(Params.double, e)
 
-      val expected = for {
-        id <- lookup("id").is(trimmed).is(required("id is required"))
-        name <- lookup("name").is(trimmed).is(required("name is required"))
-        style <- lookup("style").is(trimmed)
-        OG <- lookup("OG").is(trimmed).is(double(e => "'OG' %s should be a double".format(e)))
-        ABV <- lookup("ABV").is(trimmed).is(double(e => "'OG' %s should be a double".format(e)))
-        EBC <- lookup("EBC").is(trimmed).is(int(e => "'EBC' %s should be an int".format(e)))
-        IBU <- lookup("IBU").is(trimmed).is(int(e => "'IBU' %s should be an int".format(e)))
-      } yield Recipe(None, name.get, style, OG, ABV, EBC, IBU, "kareblak")
+      def expected(user: User) = for {
 
-      r match {
-        case Params(ps) => {
-          expected(ps).fold(
-            err => BadRequest ~> ResponseString(err.toString),
-            rec => Views.recipes(None)(rec +: fetchRecipes)
-          )
+        id <- lookup("id")        is trimmed is required("id is required")
+        name <- lookup("name")    is trimmed is required("name is required")
+        style <- lookup("style")  is trimmed
+        OG <- lookup("OG")        is trimmed is double(e => "'OG' %s should be a double".format(e))
+        ABV <- lookup("ABV")      is trimmed is double(e => "'ABV' %s should be a double".format(e))
+        EBC <- lookup("EBC")      is trimmed is int(e => "'EBC' %s should be an int".format(e))
+        IBU <- lookup("IBU")      is trimmed is int(e => "'IBU' %s should be an int".format(e))
+
+      } yield Recipe(None, name.get, style, OG, ABV, EBC, IBU, user.username)
+
+      req match {
+        case UserWithToken(Some(u)) => req match {
+          case Params(ps) => {
+            expected(u)(ps).fold(
+              err => BadRequest ~> ResponseString(err.toString),
+              rec => views.recipes(Some(u))(rec +: fetchRecipes)
+            )
+          }
+          case _ => BadRequest
         }
-        case _ => BadRequest
+        case _ => Unauthorized
       }
     }
   }
@@ -68,10 +75,23 @@ object handlers {
   object MainPageHandler {
 
     def main(req: HttpRequest[_]) = req match {
-      case UserWithToken(user) => Views.main(user, None)
-      case _ => Views.main
+      case UserWithToken(user) => views.main(user, None)
+      case _ => views.main
     }
 
+  }
+
+  case class QueryParams(qp: Map[String, Seq[String]]) {
+    def get(key: String) = qp.get(key)
+    def getOrElse(key: String, orElse: Seq[String]) = qp.getOrElse(key, orElse)
+    def foldLeft[B](acc: B)(f: (B, (String, Seq[String])) => B) = qp.foldLeft(acc)(f)
+    def apply(key: String) = qp.apply(key)
+    def mapFirst[B](key: String, f: (String) => Option[B]) = qp(key).headOption.flatMap(f)
+    def first(s: String) = qp(s).headOption
+    def firstInt(key: String) = mapFirst(key, d => allCatch.opt(d.toInt))
+    def firstLong(key: String) = mapFirst(key, d => allCatch.opt(d.toLong))
+    def firstDouble(key: String) = mapFirst(key, d => allCatch.opt(d.toDouble))
+    def asServletRequestParameters: Map[String, Array[String]] = qp.mapValues(_.toArray[String])
   }
 
 }

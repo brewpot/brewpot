@@ -1,4 +1,4 @@
-import org.brewpot.models.User
+import org.brewpot.models.TwitterUser
 import org.specs2.mutable.Specification
 import net.liftweb.json.parse
 import jsonpicklers._
@@ -17,8 +17,8 @@ class ParserSpec extends Specification {
   "A Json parser" should {
     "parse a sound json structure to a scala user object" in {
       val parsed = parse(json)
-      val Success(p, _) = User.json.unpickle(parsed)
-      val pickled = User.json.pickle(p)
+      val Success(p, _) = TwitterUser.json.unpickle(parsed)
+      val pickled = TwitterUser.json.pickle(p)
       parsed == pickled
     }
   }

@@ -2,9 +2,9 @@ package org.brewpot.web
 
 import xml.NodeSeq
 import unfiltered.response.Html5
-import org.brewpot.models.User
+import org.brewpot.models.{User, TwitterUser}
 
-object Snippets {
+object snippets {
 
   def header(text: String) =
     <div class="page-header">
@@ -23,10 +23,25 @@ object Snippets {
     {
       user match {
         case Some(u) => {
-          <li><a href="#">{ u.name.getOrElse(u.username) }</a></li>
-          <li><a href="/auth/twitter/logout"><img src="/img/twitter-bird-16x16.png"/> Logout</a></li>
+          <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+              <img src={ u.avatar.getOrElse("") } /> { u.name.getOrElse(u.username) } <b class="caret"></b>
+            </a>
+            <ul class="dropdown-menu" data-no-collapse="true">
+              <li>
+                <a href="/auth/twitter/logout">
+                  <img src="/img/twitter-bird-16x16.png"/> Logout
+                </a>
+              </li>
+            </ul>
+          </li>
         }
-        case None => <li><a href="/auth/twitter/login"><img src="/img/twitter-bird-16x16.png"/> Login</a></li>
+        case None =>
+          <li>
+            <a href="/auth/twitter/login">
+              <img src="/img/twitter-bird-16x16.png"/> Login
+            </a>
+          </li>
        }
     }
       <!-- REMOVED DUE TO ONLY ONE LOGIN OPTION -->
@@ -39,14 +54,16 @@ object Snippets {
     </ul>
   }
 
-  def recipebar =
+  def recipebar(auth: Boolean) =
     <div class="container navbar">
-        <a href="#addRecipeModal" class="btn" role="button" data-toggle="modal">
-          <i class="icon-plus"/> Add recipe
-        </a>
-        <form class="navbar-search pull-right">
-          <input type="text" class="search-query" placeholder="Filter"/>
-        </form>
+    { if (auth)
+      <a href="#addRecipeModal" class="btn pull-right" role="button" data-toggle="modal">
+        <i class="icon-plus"/> Add recipe
+      </a>
+    }
+      <form class="navbar-search pull-left">
+        <input type="text" class="search-query" placeholder="Filter"/>
+      </form>
     </div>
 
   def addRecipeModal =

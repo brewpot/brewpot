@@ -2,6 +2,7 @@ package org.brewpot.web
 
 import xml.NodeSeq
 import unfiltered.response.Html5
+import org.brewpot.models.User
 
 object Snippets {
 
@@ -12,14 +13,22 @@ object Snippets {
       </h1>
     </div>
 
-  def nav(auth: Boolean) = {
+  def nav(user: Option[User]) = {
     <ul class="nav">
       <li>
         <a href="/recipes"><i class="icon-th-list"/> Recipes</a>
       </li>
     </ul>
     <ul class="nav pull-right">
-      <li class="btn-block"><a href="/auth/twitter/login"><img src="/img/twitter-bird-16x16.png"/> Login</a></li>
+    {
+      user match {
+        case Some(u) => {
+          <li><a href="#">{ u.name.getOrElse(u.username) }</a></li>
+          <li><a href="/auth/twitter/logout"><img src="/img/twitter-bird-16x16.png"/> Logout</a></li>
+        }
+        case None => <li><a href="/auth/twitter/login"><img src="/img/twitter-bird-16x16.png"/> Login</a></li>
+       }
+    }
       <!-- REMOVED DUE TO ONLY ONE LOGIN OPTION -->
       <!--li class="dropdown">
         <a href="#" class="dropdown-toggle" data-toggle="dropdown">Login <b class="caret"></b></a>
@@ -74,7 +83,7 @@ object Snippets {
       </div>
     </div>
 
-  def bootstrap(title: String, body: NodeSeq, auth: Boolean) =
+  def bootstrap(title: String, body: NodeSeq)(user: Option[User]) =
     Html5(
       <html>
         <head>
@@ -97,7 +106,7 @@ object Snippets {
               <a class="brand" href="/">
                 Brewpot!
               </a>
-              <div class="nav-collapse collapse">{nav(auth)}</div>
+              <div class="nav-collapse collapse">{nav(user)}</div>
             </div>
           </div>
           <div class="container">

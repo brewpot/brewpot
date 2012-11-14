@@ -2,7 +2,7 @@ package org.brewpot
 
 import unfiltered.request.QParams._
 import unfiltered.request._
-import unfiltered.response.{SetCookies, BadRequest, Redirect, ResponseString}
+import unfiltered.response._
 import org.scribe.model.{Verb, OAuthRequest, Token, Verifier}
 import org.scribe.oauth.OAuthService
 import util.Properties
@@ -13,6 +13,11 @@ import net.liftweb.json.parse
 import jsonpicklers._
 import org.brewpot.models.User
 import web.Views
+import unfiltered.Cookie
+import org.brewpot.extractors.{SessionToken, UserWithToken}
+import unfiltered.response.Redirect
+import scala.Some
+import jsonpicklers.Success
 import unfiltered.Cookie
 
 object auth {
@@ -46,21 +51,31 @@ object auth {
       case _ => Views.main(None, Some("Missing OAuth params"))
     }
 
+    def logout(req: HttpRequest[_]) = req match {
+      case SessionToken(token) => {
+        setTokenCookie("")
+        tokenStore -= token
+        Redirect("/")
+      }
+      case _ => Unauthorized
+    }
+
     private def accessTokenFailed(err: String) = Views.main(None, Some(err))
 
     private def accessToken(req: HttpRequest[_], auth: (Option[String], Option[String])) =
       details.svc.getAccessToken(details.token(auth._1.get), new Verifier(auth._2.get))
 
+    private def setTokenCookie(value: String) =
+      SetCookies(Cookie(name = "user.token", value = value, path = Some("/"))) ~> Redirect("/")
+
     private def verifyToken(token: Token) = {
-      def tokenCookie(value: String) =
-        Cookie(name = "user.token", value = value, path = Some("/"))
       val request = new OAuthRequest(Verb.GET, "https://api.twitter.com/1/account/verify_credentials.json")
       details.svc.signRequest(token, request)
       val response = request.send()
       val parsed = parse(response.getBody)
       val Success(p, _) = User.json.unpickle(parsed)
       tokenStore += (token.getToken -> p)
-      SetCookies(tokenCookie(token.getToken)) ~> Redirect("/")
+      setTokenCookie(token.getToken)
     }
 
   }

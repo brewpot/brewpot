@@ -17,6 +17,7 @@ object plan extends Plan {
     }
     case req @ Path(Seg("auth" :: "twitter" :: "login" :: Nil)) => twitterFlow.authToken(req)
     case req @ Path(Seg("auth" :: "twitter" :: "callback" :: Nil)) => twitterFlow.callback(req)
+    case req @ Path(Seg("auth" :: "twitter" :: "logout" :: Nil)) => twitterFlow.logout(req)
 
   }
 

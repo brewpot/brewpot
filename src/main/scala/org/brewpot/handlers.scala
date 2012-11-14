@@ -7,7 +7,7 @@ import unfiltered.request.QParams._
 import javax.servlet.http.HttpServletRequest
 import unfiltered.response.{ResponseString, ResponseFunction, BadRequest}
 import auth._
-import org.brewpot.extractors.LoggedOnUser
+import org.brewpot.extractors.UserWithToken
 
 object handlers {
 
@@ -31,7 +31,7 @@ object handlers {
       Recipe(Some("11"), "Mjød", Option("Dobbelbock"), Option(1.080), Option(7.62), Option(60), Option(40), "kareblak"))
 
     def recipes(req: HttpRequest[_]) = req match {
-      case LoggedOnUser(user) => Views.recipes(user)(fetchRecipes)
+      case UserWithToken(user) => Views.recipes(user)(fetchRecipes)
       case _ => Views.recipes(None)(fetchRecipes)
     }
 
@@ -68,7 +68,7 @@ object handlers {
   object MainPageHandler {
 
     def main(req: HttpRequest[_]) = req match {
-      case LoggedOnUser(user) => Views.main(user, None)
+      case UserWithToken(user) => Views.main(user, None)
       case _ => Views.main
     }
 

@@ -23,8 +23,8 @@ libraryDependencies ++=
     "net.databinder" %% "unfiltered" % "0.6.3",
     "net.databinder" %% "unfiltered-filter" % "0.6.3",
     "net.databinder" %% "unfiltered-jetty" % "0.6.3",
-    "net.databinder.dispatch" %% "dispatch-core" % "0.9.4" % "test",
-    "org.specs2" %% "specs2" % "1.12.2" % "test",
+    "com.jteigen" % "jsonpicklers_2.9.1" % "0.1",
     "org.scribe" % "scribe" % "1.3.2",
-    "com.jteigen" % "jsonpicklers_2.9.1" % "0.1"
+    "net.databinder.dispatch" %% "dispatch-core" % "0.9.4" % "test",
+    "org.specs2" %% "specs2" % "1.12.2" % "test"
   )

@@ -2,7 +2,7 @@ package org.brewpot.web
 
 import xml.NodeSeq
 import unfiltered.response.Html5
-import org.brewpot.models.{User, TwitterUser}
+import org.brewpot.model.entities.User
 
 object snippets {
 

@@ -4,7 +4,7 @@ import unfiltered.request.{HttpRequest, Cookies}
 
 object extractors {
 
-  object UserWithToken {
+  object TokenUser {
     def unapply(req: HttpRequest[_]) =
       SessionToken.unapply(req).map(auth.tokenStore.get(_))
   }

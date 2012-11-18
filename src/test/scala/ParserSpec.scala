@@ -1,4 +1,4 @@
-import org.brewpot.models.TwitterUser
+import org.brewpot.model.entities.TwitterUser
 import org.specs2.mutable.Specification
 import net.liftweb.json.parse
 import jsonpicklers._

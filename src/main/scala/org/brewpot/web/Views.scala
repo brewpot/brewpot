@@ -1,13 +1,12 @@
 package org.brewpot.web
 
 import snippets._
-import org.brewpot.models._
-import xml.NodeSeq
 import unfiltered.response.Html5
+import org.brewpot.model.entities.{Recipe, User}
 
 object views {
 
-  def main(user: Option[User], alert: Option[String]): Html5 = {
+  def mainPage(user: Option[User], alert: Option[String]): Html5 = {
     bootstrap(
       "Brewpot!",
       header("Brewpot!") ++
@@ -29,14 +28,15 @@ object views {
     )(user)
   }
 
-  def main: Html5 = main(None, None)
+  def mainPage: Html5 = mainPage(None, None)
 
-  def recipes(user: Option[User])(brews: Seq[Recipe]): Html5 = bootstrap(
+  def recipesPage(user: Option[User])(brews: Seq[Recipe]): Html5 = bootstrap(
     "Recipes",
-    header("Recipes") ++
-      { if (user.isDefined) addRecipeModal else Nil } ++
+    header("Recipes") ++ {
+      if (user.isDefined) addRecipeModal else Nil
+    } ++
       <p>
-        { recipebar(user.isDefined) }
+        {recipebar(user.isDefined)}
       </p>
         <table class="table table-striped table-bordered table-hover">
           <thead>
@@ -54,7 +54,7 @@ object views {
               {x.id.getOrElse("-")}
             </td>
             <td>
-              {if (x.name.size >= 16) x.name.substring(0, 13) + "..." else x.name}
+              {if (x.name.size >= 16) x.name.substring(0, 12) + "..." else x.name}
             </td>
             <td>
               {x.style.getOrElse("-")}
@@ -78,5 +78,14 @@ object views {
         )}
         </table>
   )(user)
+
+//  def addRecipesPage(user: Option[User]) = bootstrap(
+//    "Add a recipe",
+//    recipesForm
+//  )
+
+  def editRecipesPage(user: Option[User]) = {
+
+  }
 
 }

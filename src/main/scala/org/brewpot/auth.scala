@@ -1,5 +1,6 @@
 package org.brewpot
 
+import model.entities.{TwitterUser, User}
 import unfiltered.request.QParams._
 import unfiltered.request._
 import unfiltered.response._
@@ -14,7 +15,6 @@ import jsonpicklers.Success
 import net.liftweb.json.parse
 
 import web.views
-import org.brewpot.models._
 import org.brewpot.common.EnvProperty
 import org.brewpot.extractors.SessionToken
 
@@ -35,8 +35,8 @@ object auth {
     def callback(req: HttpRequest[_]) = req match {
       case Params(ps) => {
         val expected = for {
-          oauth_token <- lookup("oauth_token")        is trimmed is required("The oauth_token is missing")
-          oauth_verifier <- lookup("oauth_verifier")  is trimmed is required("The oauth_verifier is missing")
+          oauth_token <- lookup("oauth_token") is trimmed is required("The oauth_token is missing")
+          oauth_verifier <- lookup("oauth_verifier") is trimmed is required("The oauth_verifier is missing")
         } yield (oauth_token, oauth_verifier)
         expected(ps).fold(
           err => accessTokenFailed("Failed to login"),
@@ -46,7 +46,7 @@ object auth {
           }
         )
       }
-      case _ => views.main(None, Some("Missing OAuth params"))
+      case _ => views.mainPage(None, Some("Missing OAuth params"))
     }
 
     def logout(req: HttpRequest[_]) = req match {
@@ -55,10 +55,10 @@ object auth {
         tokenStore -= token
         Redirect("/")
       }
-      case _ => Unauthorized ~> views.main
+      case _ => Unauthorized ~> views.mainPage
     }
 
-    private def accessTokenFailed(err: String) = views.main(None, Some(err))
+    private def accessTokenFailed(err: String) = views.mainPage(None, Some(err))
 
     private def accessToken(req: HttpRequest[_], auth: (Option[String], Option[String])) =
       details.svc.getAccessToken(details.token(auth._1.get), new Verifier(auth._2.get))
@@ -74,17 +74,27 @@ object auth {
       val parsed = parse(response.getBody)
       // TODO: Needs to be generic, type User
       val Success(p, _) = TwitterUser.json.unpickle(parsed)
+      cleanOldTokens(p)
       tokenStore += (token.getToken -> p)
       applyCookie(token.getToken)
     }
+
+    private def cleanOldTokens(u: User) =
+      tokenStore.find(_._2.username == u.username).foreach(tokenStore -= _._1)
+
   }
 
   trait ServiceDetails extends EnvProperty {
     protected def key: String
+
     protected def secret: String
+
     def svc(callback: String): OAuthService
+
     def svc: OAuthService
+
     def token(token: String): Token = new Token(token, secret)
+
     def callback(base: String): String
   }
 

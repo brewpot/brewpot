@@ -2,7 +2,7 @@ package org.brewpot.web
 
 import snippets._
 import unfiltered.response.Html5
-import org.brewpot.model.entities.{Recipe, User}
+import org.brewpot.entities.{Recipe, User}
 
 object views {
 
@@ -48,28 +48,28 @@ object views {
             <th class="hidden-phone">EBC</th>
             <th class="hidden-phone">IBU</th>
             <th>Brewer</th>
-          </thead>{brews.sortBy(-_.id.getOrElse("0").toInt).map(x =>
+          </thead>{brews.sortBy(-_.id.toInt).map(x =>
           <tr onclick="input" data-toggle="modal" href="#addRecipeModal">
             <td class="hidden-phone">
-              {x.id.getOrElse("-")}
+              {x.id}
             </td>
             <td>
-              {if (x.name.size >= 16) x.name.substring(0, 12) + "..." else x.name}
+              {if (x.data.name.size >= 16) x.data.name.substring(0, 12) + "..." else x.data.name}
             </td>
             <td>
-              {x.style.getOrElse("-")}
+              {x.data.style.getOrElse("-")}
             </td>
             <td>
-              {x.OG.getOrElse(0)}
+              {x.data.OG.getOrElse(0)}
             </td>
             <td class="hidden-phone">
-              {x.ABV.getOrElse(0)}
+              {x.data.ABV.getOrElse(0)}
               %</td>
             <td class="hidden-phone">
-              {x.EBC.getOrElse(0)}
+              {x.data.EBC.getOrElse(0)}
             </td>
             <td class="hidden-phone">
-              {x.IBU.getOrElse(0)}
+              {x.data.IBU.getOrElse(0)}
             </td>
             <td>
               {x.user}
@@ -78,11 +78,6 @@ object views {
         )}
         </table>
   )(user)
-
-//  def addRecipesPage(user: Option[User]) = bootstrap(
-//    "Add a recipe",
-//    recipesForm
-//  )
 
   def editRecipesPage(user: Option[User]) = {
 

@@ -1,8 +1,6 @@
 package org.brewpot
 
-import model.entities._
 import org.brewpot.web.views
-import unfiltered.request.QParams._
 import javax.servlet.http.HttpServletRequest
 import unfiltered.response._
 import unfiltered.request._
@@ -12,6 +10,8 @@ import scala.Some
 import unfiltered.response.ResponseString
 import net.liftweb.json.parseOpt
 import jsonpicklers.{Failure, Success}
+import java.util.UUID
+import org.brewpot.entities._
 
 object handlers {
 
@@ -21,18 +21,8 @@ object handlers {
      * Temporary stuff
      */
     lazy val recipes = collection.mutable.Buffer(
-      Recipe(Some("0"), "Underyul", Option("Lager"), Option(1.080), Option(7.62), Option(60), Option(40), "kareblak"),
-      Recipe(Some("1"), "Overyul", Option("Dobbelbock"), Option(1.080), Option(7.62), Option(60), Option(40), "kareblak"),
-      Recipe(Some("2"), "ObamaRama IPA", Option("IPA"), Option(1.280), Option(14.0), Option(60), Option(40), "obama"),
-      Recipe(Some("3"), "Mjød", Option("Mead"), Option(1.080), Option(7.62), Option(60), Option(40), "kareblak"),
-      Recipe(Some("4"), "Vestkyst", Option("IPA"), Option(1.080), Option(7.62), Option(60), Option(40), "kareblak"),
-      Recipe(Some("5"), "Overyul", Option("Dobbelbock"), Option(1.080), Option(7.62), Option(60), Option(40), "kareblak"),
-      Recipe(Some("6"), "Obama Honey Ale", Option("Dobbelbock"), Option(1.080), Option(7.62), Option(60), Option(40), "obama"),
-      Recipe(Some("7"), "Mjød", Option("Dobbelbock"), Option(1.080), Option(7.62), Option(60), Option(40), "kareblak"),
-      Recipe(Some("8"), "Underyul", Option("Dobbelbock"), Option(1.080), Option(7.62), Option(60), Option(40), "kareblak"),
-      Recipe(Some("9"), "Overyul", Option("Dobbelbock"), Option(1.080), Option(7.62), Option(60), Option(40), "kareblak"),
-      Recipe(Some("10"), "Obama Honey Ale", Option("Dobbelbock"), Option(1.080), Option(7.62), Option(60), Option(40), "obama"),
-      Recipe(Some("11"), "Mjød", Option("Dobbelbock"), Option(1.080), Option(7.62), Option(60), Option(40), "kareblak"))
+      Recipe("0", "kareblak", RecipeData("Underyul", Option("Lager"), Option(1.080), Option(7.62), Option(60), Option(40))),
+      Recipe("11", "obama", RecipeData("Mjød", Option("Dobbelbock"), Option(1.080), Option(7.62), Option(60), Option(40))))
 
     def handleRecipes(req: HttpRequest[_]) = req match {
       case TokenUser(user) => views.recipesPage(user)(recipes)
@@ -47,9 +37,9 @@ object handlers {
       val TokenUser(user) = req
       user match {
         case Some(user) => {
-          parseOpt(Body.string(req)).map(j => PickledRecipe.json.unpickle(j) match {
-            case Success(recipe, _) => views.recipesPage(Some(user))(Recipe(recipe, user) +=: recipes)
-            case Failure(_, _) => BadRequest
+          parseOpt(Body.string(req)).map(j => RecipeData.json.unpickle(j) match {
+            case Success(recipe, _) => views.recipesPage(Some(user))(Recipe(UUID.randomUUID().toString, user.username, recipe) +=: recipes)
+            case f: Failure => BadRequest ~> ResponseString(f.toString)
           }).getOrElse(BadRequest)
         }
         case None => Unauthorized
@@ -57,7 +47,6 @@ object handlers {
 
     }
   }
-
 
   object MainPageHandler {
     def handleMain(req: HttpRequest[_]) = req match {

@@ -1,6 +1,5 @@
 package org.brewpot
 
-import model.entities.{TwitterUser, User}
 import unfiltered.request.QParams._
 import unfiltered.request._
 import unfiltered.response._
@@ -17,6 +16,7 @@ import net.liftweb.json.parse
 import web.views
 import org.brewpot.common.EnvProperty
 import org.brewpot.extractors.SessionToken
+import org.brewpot.entities.{TwitterUser, User}
 
 object auth {
 

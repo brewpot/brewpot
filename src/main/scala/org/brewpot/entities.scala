@@ -1,18 +1,14 @@
-package org.brewpot.model
+package org.brewpot
 
 import jsonpicklers.Picklers._
 
 object entities {
 
-  case class Recipe(id: Option[String], name: String, style: Option[String], OG: Option[Double], ABV: Option[Double], EBC: Option[Int], IBU: Option[Int], user: String)
+  case class Recipe(id: String, user: String, data: RecipeData)
 
-  object Recipe {
-    def apply(p: PickledRecipe, u: User): Recipe = Recipe(None, p.name, p.style, p.OG, p.ABV, p.EBC, p.IBU, u.username)
-  }
+  case class RecipeData(name: String, style: Option[String], OG: Option[Double], ABV: Option[Double], EBC: Option[Int], IBU: Option[Int])
 
-  case class PickledRecipe(name: String, style: Option[String], OG: Option[Double], ABV: Option[Double], EBC: Option[Int], IBU: Option[Int])
-
-  object PickledRecipe {
+  object RecipeData {
     val json = wrap(apply)(unapply(_).get) {
       ("name"               :: string) ~
       ("style"              :: string).? ~

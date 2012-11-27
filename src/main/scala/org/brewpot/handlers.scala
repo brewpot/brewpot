@@ -29,8 +29,8 @@ object handlers {
       case _ => views.recipesPage(None)(recipes)
     }
 
-    def handleAddRecipeForm(req: HttpRequest[HttpServletRequest]): ResponseFunction[Any] = {
-      Ok
+    def handleAddRecipeForm(req: HttpRequest[HttpServletRequest]): ResponseFunction[Any] = req match {
+      case TokenUser(user) => views.newRecipePage(user)
     }
 
     def handleSaveRecipe(req: HttpRequest[_]): ResponseFunction[Any] = {
@@ -42,7 +42,7 @@ object handlers {
             case f: Failure => BadRequest ~> ResponseString(f.toString)
           }).getOrElse(BadRequest)
         }
-        case None => Unauthorized
+        case None => Forbidden
       }
 
     }

@@ -16,7 +16,7 @@ object plan extends Plan {
 
     case req @ GET(Path(Seg("recipes" :: Nil))) => RecipeHandler.handleRecipes(req)
 
-    case req @ GET(Path(Seg("recipesinput" :: Nil))) => NotImplemented
+    case req @ GET(Path(Seg("recipesinput" :: Nil))) => RecipeHandler.handleAddRecipeForm(req)
 
     case req @ POST(Path(Seg("recipesinput" :: Nil))) => RecipeHandler.handleSaveRecipe(req)
 

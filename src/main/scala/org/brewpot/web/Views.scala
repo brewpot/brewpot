@@ -9,7 +9,6 @@ object views {
   def mainPage(user: Option[User], alert: Option[String]): Html5 = {
     bootstrap(
       "Brewpot!",
-      header("Brewpot!") ++
         (alert match {
           case Some(s) =>
             <div class="alert alert-error">
@@ -32,9 +31,6 @@ object views {
 
   def recipesPage(user: Option[User])(brews: Seq[Recipe]): Html5 = bootstrap(
     "Recipes",
-    header("Recipes") ++ {
-      if (user.isDefined) addRecipeModal else Nil
-    } ++
       <p>
         {recipebar(user.isDefined)}
       </p>
@@ -49,38 +45,24 @@ object views {
             <th class="hidden-phone">IBU</th>
             <th>Brewer</th>
           </thead>{brews.sortBy(-_.id.toInt).map(x =>
-          <tr onclick="input" data-toggle="modal" href="#addRecipeModal">
-            <td class="hidden-phone">
-              {x.id}
-            </td>
-            <td>
-              {if (x.data.name.size >= 16) x.data.name.substring(0, 12) + "..." else x.data.name}
-            </td>
-            <td>
-              {x.data.style.getOrElse("-")}
-            </td>
-            <td>
-              {x.data.OG.getOrElse(0)}
-            </td>
-            <td class="hidden-phone">
-              {x.data.ABV.getOrElse(0)}
-              %</td>
-            <td class="hidden-phone">
-              {x.data.EBC.getOrElse(0)}
-            </td>
-            <td class="hidden-phone">
-              {x.data.IBU.getOrElse(0)}
-            </td>
-            <td>
-              {x.user}
-            </td>
+          <tr>
+            <td class="hidden-phone">{x.id}</td>
+            <td>{if (x.data.name.size >= 16) x.data.name.substring(0, 12) + "..." else x.data.name}</td>
+            <td>{x.data.style.getOrElse("-")}</td>
+            <td>{x.data.OG.getOrElse(0)}</td>
+            <td class="hidden-phone">{x.data.ABV.getOrElse(0)} %</td>
+            <td class="hidden-phone">{x.data.EBC.getOrElse(0)}</td>
+            <td class="hidden-phone">{x.data.IBU.getOrElse(0)}</td>
+            <td>{x.user}</td>
           </tr>
         )}
         </table>
   )(user)
 
-  def editRecipesPage(user: Option[User]) = {
+  def newRecipePage(user: Option[User]) = bootstrap(
+    "Add recipe",
+    recipeForm
+  )(user)
 
-  }
 
 }

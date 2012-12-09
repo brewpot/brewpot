@@ -3,6 +3,7 @@ package org.brewpot.web
 import xml.NodeSeq
 import unfiltered.response.Html5
 import org.brewpot.entities.User
+import URITools._
 
 object snippets {
 
@@ -25,7 +26,7 @@ object snippets {
         case Some(u) => {
           <li class="dropdown">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-              <img src={ u.avatar.getOrElse("") }/>  { u.name.getOrElse(u.username) } <b class="caret"></b>
+              {avatar(u)}  {u.name.getOrElse(u.username)} <b class="caret"></b>
             </a>
             <ul class="dropdown-menu" data-no-collapse="true">
               <li>
@@ -136,5 +137,7 @@ object snippets {
         </body>
       </html>
     )
+
+  private def avatar(user: User) = user.avatar.map(u => <img src={link(u)}/>).getOrElse("/img/twitter-bird-16x16.png")
 
 }

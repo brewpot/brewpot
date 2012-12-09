@@ -6,6 +6,12 @@ object entities {
 
   case class Recipe(id: String, user: String, data: RecipeData)
 
+  case class User(id: Option[String] = None, username: String, name: Option[String] = None, avatar: Option[String] = None)
+
+  case class GuildMember(brewer: User, admin: Boolean)
+
+  case class BrewGuild(name: String, members: Seq[GuildMember])
+
   case class RecipeData(name: String, style: Option[String], OG: Option[Double], ABV: Option[Double], EBC: Option[Int], IBU: Option[Int])
 
   object RecipeData {
@@ -19,7 +25,7 @@ object entities {
     }
   }
 
-  case class TwitterUser(username: String, name: Option[String], avatar: Option[String]) extends User
+  case class TwitterUser(username: String, name: Option[String], avatar: Option[String])
 
   object TwitterUser {
     val json = wrap(apply)(unapply(_).get) {
@@ -29,10 +35,5 @@ object entities {
     }
   }
 
-  trait User {
-    val username: String
-    val name: Option[String]
-    val avatar: Option[String]
-  }
 
 }

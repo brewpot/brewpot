@@ -2,7 +2,7 @@ package org.brewpot.web
 
 import xml.NodeSeq
 import unfiltered.response.Html5
-import org.brewpot.entities.{Recipe, User}
+import org.brewpot.entities.User
 
 object snippets {
 
@@ -59,7 +59,7 @@ object snippets {
       </form>
     </div>
 
-  def recipeForm =
+  val recipeForm =
     <container class="container-fluid">
       <form class="form-horizontal">
         <div class="control-group">

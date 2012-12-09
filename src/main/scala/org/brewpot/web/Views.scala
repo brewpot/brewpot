@@ -9,20 +9,14 @@ object views {
   def mainPage(user: Option[User], alert: Option[String]): Html5 = {
     bootstrap(
       "Brewpot!",
-        (alert match {
-          case Some(s) =>
-            <div class="alert alert-error">
-              <button type="button" class="close" data-dismiss="alert">×</button>
-              <strong>Authentication error!</strong>
-              I'm sorry, we couldn't log you in. Why not try again?
-            </div>
-          case None => Nil
-        }) ++
         <p>
-          Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore
-          magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-          consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
-          Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+          <h2>Features comming up:</h2>
+          <ul>
+            <li>Searchable recipe database</li>
+            <li>Algorithms for all you OG, IBU, EBC etc. calculation needs</li>
+            <li>Brewing guilds with any social aspects we come up with</li>
+            <li> ... </li>
+          </ul>
         </p>
     )(user)
   }

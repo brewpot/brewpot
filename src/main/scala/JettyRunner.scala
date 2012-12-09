@@ -10,7 +10,7 @@ object JettyRunner extends App {
     unfiltered.jetty.Http(port)
       .resources(new File("src/main/resources").toURI.toURL)
       .filter(plan)
-      .start
+      .start()
   }
 
   start

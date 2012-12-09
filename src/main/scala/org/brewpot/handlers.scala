@@ -1,10 +1,10 @@
 package org.brewpot
 
+import auth.TokenUser
 import org.brewpot.web.views
 import javax.servlet.http.HttpServletRequest
 import unfiltered.response._
 import unfiltered.request._
-import org.brewpot.extractors.TokenUser
 import util.control.Exception._
 import scala.Some
 import unfiltered.response.ResponseString
@@ -34,23 +34,24 @@ object handlers {
     }
 
     def handleSaveRecipe(req: HttpRequest[_]): ResponseFunction[Any] = {
-      val TokenUser(user) = req
-      user match {
-        case Some(user) => {
-          parseOpt(Body.string(req)).map(j => RecipeData.json.unpickle(j) match {
-            case Success(recipe, _) => views.recipesPage(Some(user))(Recipe(UUID.randomUUID().toString, user.username, recipe) +=: recipes)
-            case f: Failure => BadRequest ~> ResponseString(f.toString)
-          }).getOrElse(BadRequest)
-        }
+      def toRecipesPage(u: User) = {
+        parseOpt(Body.string(req)).map(j => RecipeData.json.unpickle(j) match {
+          case Success(recipe, _) => views.recipesPage(Some(u))(Recipe(UUID.randomUUID().toString, u.username, recipe) +=: recipes)
+          case f: Failure => BadRequest ~> ResponseString(f.toString())
+        }).getOrElse(BadRequest)
+      }
+      TokenUser.unapply(req).get match {
+        case Some(u) => toRecipesPage(u)
         case None => Forbidden
       }
-
     }
   }
 
   object MainPageHandler {
     def handleMain(req: HttpRequest[_]) = req match {
-      case TokenUser(user) => views.mainPage(user, None)
+      case TokenUser(user) => {
+        views.mainPage(user, None)
+      }
       case _ => views.mainPage
     }
   }

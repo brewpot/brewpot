@@ -1,6 +1,7 @@
 package org.brewpot.auth
 
-import org.brewpot.entities.User
+import org.brewpot.model.Entities
+import Entities.User
 
 object TokenProvider {
 
@@ -10,6 +11,6 @@ object TokenProvider {
 
 object UserProvider {
 
-  val userStore = new collection.mutable.HashMap[(String, Class[_ <: AuthProvider]), User]()
+  val userStore = new collection.mutable.HashMap[(String, Class[_ <: Provider]), User]()
 
 }

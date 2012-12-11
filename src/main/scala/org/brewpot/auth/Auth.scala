@@ -4,15 +4,21 @@ import unfiltered.request._
 import unfiltered.response._
 import unfiltered.request.QParams._
 import scala.Some
-import org.brewpot.web.views
+import org.brewpot.web.Views
 import org.scribe.model.{Token, Verifier}
 import unfiltered.Cookie
-import org.brewpot.entities.User
+import org.brewpot.model.Entities
+import Entities.User
 import TokenProvider._
 import UserProvider._
 import util.Random
+import scala.Predef._
+import unfiltered.response.Redirect
+import scala.Some
+import Entities.User
+import unfiltered.Cookie
 
-class Auth[A <: AuthProvider](authProvider: A)(implicit manifest: Manifest[A]) {
+class Auth[A <: Provider](authProvider: A)(implicit manifest: Manifest[A]) {
 
   def authToken(r: HttpRequest[_]) = {
     val Host(host) = r
@@ -33,7 +39,7 @@ class Auth[A <: AuthProvider](authProvider: A)(implicit manifest: Manifest[A]) {
         auth => verify(accessToken(req, auth))
       )
     }
-    case _ => views.mainPage(None, Some("Missing OAuth params"))
+    case _ => Views.mainPage(None, Some("Missing OAuth params"))
   }
 
   def logout(req: HttpRequest[_]) = req match {
@@ -42,10 +48,10 @@ class Auth[A <: AuthProvider](authProvider: A)(implicit manifest: Manifest[A]) {
       tokenStore -= token
       Redirect("/")
     }
-    case _ => Unauthorized ~> views.mainPage
+    case _ => Unauthorized ~> Views.mainPage
   }
 
-  private def accessTokenFailed(err: String) = views.mainPage(None, Some(err))
+  private def accessTokenFailed(err: String) = Views.mainPage(None, Some(err))
 
   private def accessToken(req: HttpRequest[_], auth: (Option[String], Option[String])) =
     authProvider.service().getAccessToken(authProvider.token(auth._1.get), new Verifier(auth._2.get))
@@ -54,38 +60,31 @@ class Auth[A <: AuthProvider](authProvider: A)(implicit manifest: Manifest[A]) {
     SetCookies(Cookie(name = "user.token", value = value, path = Some("/")))
 
   /**
-   * Here be dragons.
+   * Here be imperative dragons.
    */
   private def verify(ext: Token) = {
     authProvider.verify(ext).map { u =>
-      verifyUser(u)
-      cleanOldTokens(u)
+      val user = expandUser(u)
+      tokenStore.find(_._2.username == u.username).foreach(tokenStore -= _._1)
       val token = generateToken(64)
-      tokenStore += (token -> u)
+      tokenStore += (token -> user)
       applyCookie(token) ~> Redirect("/")
     }.getOrElse(Forbidden)
   }
 
-  private def verifyUser(user: User) {
+
+  private def expandUser(user: User): User = {
     val clazz = manifest.erasure.asInstanceOf[Class[A]]
-    if (!userStore.contains((user.id, clazz))) {
-      userStore += ((user.id, clazz) -> user)
-      println(userStore)
-    }
+    userStore.get((user.id, clazz)).getOrElse(user)
   }
 
   private def generateToken(len: Int) = {
     val chars = ('a' to 'z') ++ ('A' to 'Z') ++ ('1' to '9')
     (1 to len).map(n => chars(Random.nextInt(chars.length))).mkString
   }
-
-  private def cleanOldTokens(u: User) =
-    tokenStore.find(_._2.username == u.username).foreach(tokenStore -= _._1)
-
 }
 
 object TokenUser {
-
   def unapply(req: HttpRequest[_]) =
     SessionToken.unapply(req).map(tokenStore.get(_))
 }

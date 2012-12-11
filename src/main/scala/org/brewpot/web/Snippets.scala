@@ -2,10 +2,9 @@ package org.brewpot.web
 
 import xml.NodeSeq
 import unfiltered.response.Html5
-import org.brewpot.entities.User
-import URITools._
+import org.brewpot.model.Entities.User
 
-object snippets {
+object Snippets {
 
   def header(text: String) =
     <div class="page-header">
@@ -23,20 +22,23 @@ object snippets {
     <ul class="nav pull-right">
     {
       user match {
-        case Some(u) => {
+        case Some(u) =>
           <li class="dropdown">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
               {avatar(u)}  {u.name.getOrElse(u.username)} <b class="caret"></b>
             </a>
             <ul class="dropdown-menu" data-no-collapse="true">
               <li>
+                <a href="/profile">
+                  <i class="icon-user"/> Profile
+                </a>
                 <a href="/auth/twitter/logout">
-                  <img src="/img/twitter-bird-16x16.png"/> Logout
+                  <i class="icon-off"/> Logout
                 </a>
               </li>
             </ul>
           </li>
-        }
+
         case None =>
           <li>
             <a href="/auth/twitter/login">
@@ -79,6 +81,7 @@ object snippets {
               <option>6C Imperial IPA</option>
             </select>
             <select class="span2" id="selectStyleGuide">
+              <option>Select style guide</option>
               <option>Norbrygg 2012</option>
             </select>
           </div>
@@ -92,7 +95,7 @@ object snippets {
       </div>
     </container>
 
-  def bootstrap(title: String, body: NodeSeq)(user: Option[User]) =
+  def bootstrap(title: String, body: NodeSeq)(implicit user: Option[User]) =
     Html5(
       <html>
         <head>
@@ -140,6 +143,8 @@ object snippets {
       </html>
     )
 
-  private def avatar(user: User) = user.avatar.map(u => <img src={link(u)}/>).getOrElse("/img/twitter-bird-16x16.png")
+  private def avatar(user: User) = <img src={user.avatar.getOrElse("/img/twitter-bird-16x16.png")}/>
+
+  val tweetyBird = <img src="/img/twitter-bird-16x16.png"/>
 
 }

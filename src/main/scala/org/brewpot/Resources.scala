@@ -1,22 +1,25 @@
 package org.brewpot
 
+import twitter.TwitterSpecifics
 import unfiltered.filter.Plan
 import unfiltered.request._
 import org.brewpot.handlers._
-import org.brewpot.auth.{Auth, TwitterAuthProvider}
+import org.brewpot.auth.{Auth}
 
-object plan extends Plan {
+object Resources extends Plan {
 
-  lazy val twitterFlow = new Auth(TwitterAuthProvider)
+  lazy val twitterFlow = new Auth(TwitterSpecifics)
 
   def intent = {
-    case req @ GET(Path(Seg(Nil))) => MainPageHandler.handleMain(req)
+    case req @ GET(Path(Seg(Nil))) => FrontHandler.handleMain(req)
 
     case req @ GET(Path(Seg("recipes" :: Nil))) => RecipeHandler.handleRecipes(req)
 
     case req @ GET(Path(Seg("recipesinput" :: Nil))) => RecipeHandler.handleAddRecipeForm(req)
 
     case req @ POST(Path(Seg("recipesinput" :: Nil))) => RecipeHandler.handleSaveRecipe(req)
+
+    case req @ GET(Path(Seg("profile" :: Nil))) => UserHandler.handleProfile(req)
 
     case req @ Path(Seg("auth" :: "twitter" :: "login" :: Nil)) => twitterFlow.authToken(req)
 

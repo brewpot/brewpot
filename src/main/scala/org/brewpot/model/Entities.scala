@@ -1,8 +1,9 @@
-package org.brewpot
+package org.brewpot.model
 
 import jsonpicklers.Picklers._
+import org.brewpot.twitter.TwitterImage
 
-object entities {
+object Entities {
 
   case class Recipe(id: String, user: String, data: RecipeData)
 
@@ -25,14 +26,18 @@ object entities {
     }
   }
 
-  case class TwitterUser(id: Int, username: String, name: Option[String], avatar: Option[String])
+  case class TwitterUser(id: Int, username: String, name: Option[String], avatar: Option[String]) {
+
+    def normalize = User(id.toString, username, name, avatar.map(TwitterImage.toBigger(_)))
+
+  }
 
   object TwitterUser {
     val json = wrap(apply)(unapply(_).get) {
-      ("id"                 :: int) ~
-      ("screen_name"        :: string) ~
-      ("name"               :: string).? ~
-      ("profile_image_url"  :: string).?
+      ("id"                       :: int) ~
+      ("screen_name"              :: string) ~
+      ("name"                     :: string).? ~
+      ("profile_image_url_https"  :: string).?
     }
   }
 

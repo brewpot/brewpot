@@ -18,10 +18,6 @@ abstract class AuthProvider extends EnvProperty {
   def callback(base: String): String
 }
 
-object Provider extends Enumeration {
-  val Twitter = Value
-}
-
 object TwitterAuthProvider extends AuthProvider {
   protected val key = property("TWITTER_CONSUMER_KEY")
   protected val secret = property("TWITTER_CONSUMER_SECRET")

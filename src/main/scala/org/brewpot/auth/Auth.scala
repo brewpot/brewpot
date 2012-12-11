@@ -12,7 +12,7 @@ import TokenProvider._
 import UserProvider._
 import util.Random
 
-class AuthFlow[A <: AuthProvider](authProvider: A)(implicit manifest: Manifest[A]) {
+class Auth[A <: AuthProvider](authProvider: A)(implicit manifest: Manifest[A]) {
 
   def authToken(r: HttpRequest[_]) = {
     val Host(host) = r

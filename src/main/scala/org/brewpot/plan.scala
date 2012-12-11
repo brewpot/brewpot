@@ -3,11 +3,11 @@ package org.brewpot
 import unfiltered.filter.Plan
 import unfiltered.request._
 import org.brewpot.handlers._
-import org.brewpot.auth.{AuthFlow, TwitterAuthProvider}
+import org.brewpot.auth.{Auth, TwitterAuthProvider}
 
 object plan extends Plan {
 
-  lazy val twitterFlow = new AuthFlow(TwitterAuthProvider)
+  lazy val twitterFlow = new Auth(TwitterAuthProvider)
 
   def intent = {
     case req @ GET(Path(Seg(Nil))) => MainPageHandler.handleMain(req)

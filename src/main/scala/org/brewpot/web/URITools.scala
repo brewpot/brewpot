@@ -1,6 +1,5 @@
 package org.brewpot.web
 
-import java.net.URL
 
 object URITools {
 

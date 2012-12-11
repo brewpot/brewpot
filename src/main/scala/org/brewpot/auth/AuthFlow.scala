@@ -9,10 +9,10 @@ import org.scribe.model.{Token, Verifier}
 import unfiltered.Cookie
 import org.brewpot.entities.User
 import TokenProvider._
-import java.security.MessageDigest
+import UserProvider._
 import util.Random
 
-class AuthFlow[A <: AuthProvider](authProvider: A) {
+class AuthFlow[A <: AuthProvider](authProvider: A)(implicit manifest: Manifest[A]) {
 
   def authToken(r: HttpRequest[_]) = {
     val Host(host) = r
@@ -30,10 +30,7 @@ class AuthFlow[A <: AuthProvider](authProvider: A) {
       } yield (oauth_token, oauth_verifier)
       expected(ps).fold(
         err => accessTokenFailed("Failed to login"),
-        auth => {
-          val at = accessToken(req, auth)
-          verify(at)
-        }
+        auth => verify(accessToken(req, auth))
       )
     }
     case _ => views.mainPage(None, Some("Missing OAuth params"))
@@ -56,14 +53,25 @@ class AuthFlow[A <: AuthProvider](authProvider: A) {
   private def applyCookie(value: String) =
     SetCookies(Cookie(name = "user.token", value = value, path = Some("/")))
 
+  /**
+   * Here be dragons.
+   */
   private def verify(ext: Token) = {
-    authProvider.verify(ext).map {
-      u =>
-        cleanOldTokens(u)
-        val token = generateToken(64)
-        tokenStore += (token -> u)
-        applyCookie(token) ~> Redirect("/")
+    authProvider.verify(ext).map { u =>
+      verifyUser(u)
+      cleanOldTokens(u)
+      val token = generateToken(64)
+      tokenStore += (token -> u)
+      applyCookie(token) ~> Redirect("/")
     }.getOrElse(Forbidden)
+  }
+
+  private def verifyUser(user: User) {
+    val clazz = manifest.erasure.asInstanceOf[Class[A]]
+    if (!userStore.contains((user.id, clazz))) {
+      userStore += ((user.id, clazz) -> user)
+      println(userStore)
+    }
   }
 
   private def generateToken(len: Int) = {

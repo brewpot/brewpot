@@ -2,7 +2,6 @@ import com.ning.http.client.Response
 import dispatch.{url, Http}
 import org.specs2._
 import JettyRunner._
-import org.specs2.specification.Example
 import unfiltered.response._
 
 class IntegrationSpec extends HttpHarness with Specification {

@@ -62,6 +62,7 @@ object snippets {
 
   val recipeForm =
     <container class="container-fluid">
+      <div class="span12">
       <form class="form-horizontal">
         <div class="control-group">
           <label class="control-label" for="inputName">Name</label>
@@ -88,6 +89,7 @@ object snippets {
           </div>
         </div>
       </form>
+      </div>
     </container>
 
   def bootstrap(title: String, body: NodeSeq)(user: Option[User]) =

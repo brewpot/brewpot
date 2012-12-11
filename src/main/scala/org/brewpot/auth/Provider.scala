@@ -9,13 +9,17 @@ import org.scribe.builder.api.TwitterApi
 import net.liftweb.json._
 import scala.Some
 
-trait AuthProvider extends EnvProperty {
+abstract class AuthProvider extends EnvProperty {
   protected def key: String
   protected def secret: String
   def service(callback: Option[String] = None): OAuthService
   def token(token: String): Token = new Token(token, secret)
   def verify(token: Token): Option[User]
   def callback(base: String): String
+}
+
+object Provider extends Enumeration {
+  val Twitter = Value
 }
 
 object TwitterAuthProvider extends AuthProvider {
@@ -39,7 +43,7 @@ object TwitterAuthProvider extends AuthProvider {
     service().signRequest(token, req)
     val json = parse(req.send().getBody)
     TwitterUser.json.unpickle(json) match {
-      case jsonpicklers.Success(u, _) => Some(User(username = u.username, name = u.name, avatar = u.avatar))
+      case jsonpicklers.Success(u, _) => Some(User(u.id.toString, u.username, u.name, u.avatar))
       case _ => None
     }
   }

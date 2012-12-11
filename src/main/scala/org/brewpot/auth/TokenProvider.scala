@@ -7,3 +7,9 @@ object TokenProvider {
   val tokenStore = new collection.mutable.HashMap[String, User]()
 
 }
+
+object UserProvider {
+
+  val userStore = new collection.mutable.HashMap[(String, Class[_ <: AuthProvider]), User]()
+
+}

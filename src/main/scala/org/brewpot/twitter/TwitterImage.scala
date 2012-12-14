@@ -2,15 +2,15 @@ package org.brewpot.twitter
 
 object TwitterImage {
 
-  def toBigger(uri: String): String = to("_bigger")(uri)
-  def toNormal(uri: String): String = to("_normal")(uri)
-  def toMini(uri: String): String = to("_mini")(uri)
-  def toDefault(uri: String): String = to("")(uri)
+  val toBigger  = to("_bigger")_
+  val toNormal  = to("_normal")_
+  val toMini    = to("_mini")_
+  val toDefault = to("")_
 
   private def to(size: String)(uri: String): String = {
-    val regex = """(.*)_[a-z]+(.[a-z]{3,4})""".r
-    val regex(a, b) = uri
-    "%s%s%s".format(a, size, b)
+    val _index = uri.lastIndexOf('_')
+    val regex = """(_[a-z]+)?(.[^.]*)\Z""".r
+    uri.substring(0, _index) + regex.replaceFirstIn(uri.substring(_index), size+"$2")
   }
 
 }

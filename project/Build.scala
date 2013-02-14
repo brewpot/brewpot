@@ -1,6 +1,7 @@
 import sbt._
 import sbt.Keys._
 import scala.Some
+import com.typesafe.startscript.StartScriptPlugin
 
 object Build extends Build {
 
@@ -21,6 +22,7 @@ object Build extends Build {
         libraryDependencies ++= External.libraryDependencies,
         resolvers           ++= External.resolvers
     )
+    ++ seq(StartScriptPlugin.startScriptForClassesSettings: _*)
   ) dependsOn(ext)
 
   lazy val ext = RootProject(uri("https://github.com/teigen/unfiltered-directives.git"))

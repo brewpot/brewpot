@@ -4,11 +4,11 @@ import directives.Directives._
 import unfiltered.request.{Accepts, GET, Seg}
 import unfiltered.response.{HtmlContent, Html5, Ok}
 
-trait PlanModule extends IndexPlan {
+trait PlanModule extends PagePlan {
   def intent = index
 }
 
-trait IndexPlan extends ServiceModule with Wrapper {
+trait PagePlan extends ServiceModule with HtmlWrapperModule {
 
     def index = Intent {
       case "/" =>

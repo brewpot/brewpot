@@ -7,7 +7,7 @@ class Application extends Plan {
   // assemble the cake
   object global extends PlanModule
     with StaticService
-    with BootstrapWrapper
+    with BootstrapHtmlWrapper
     with StaticDataProvider
 
   // assemble all intents

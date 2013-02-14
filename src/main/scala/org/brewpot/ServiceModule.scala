@@ -2,7 +2,7 @@ package org.brewpot
 
 import xml.NodeSeq
 
-trait ServiceModule extends Wrapper
+trait ServiceModule extends HtmlWrapperModule
   with DataProviderModule {
 
   val greet: NodeSeq

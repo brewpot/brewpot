@@ -8,10 +8,10 @@ import directives._, Directives._
 
 import Cake.MainHandler._
 
-trait Routes extends Plan {
+object Routes extends Plan {
 
   def intent = Intent{
-    case "/example" =>
+    case "/" =>
       for {
         _ <- GET
         _ <- Accepts.Html

@@ -2,13 +2,12 @@ import java.io.File
 import org.brewpot.Routes
 import util.Properties
 
-object Server extends App with Routes { this: Routes =>
+object Server extends App {
 
   val port = Properties.envOrElse("PORT", "8888") toInt
 
-  unfiltered.jetty.Http(port).context("/") { c =>
-    c.filter(this)
-    c.resources(new File("src/main/resources").toURI.toURL)
-  } run (s => println("server started"))
-
+  unfiltered.jetty.Http(port)
+    .filter(Routes)
+    .resources(new File("src/main/resources").toURI.toURL)
+    .start
 }

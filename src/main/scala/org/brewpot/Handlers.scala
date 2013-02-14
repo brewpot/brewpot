@@ -7,17 +7,15 @@ trait Handlers {
   trait MainGetHandler extends GetHandler[NodeSeq] with Bootstrap {
     lazy val handle = wrap(
       <h1>Routes</h1>
-        <table class="table">
-          <thead>
+        <table class="table table-bordered">
             <tr>
-              <td>Title</td>
-              <td>Path</td>
+              <th>Resources</th>
+              <th>Path</th>
             </tr>
-          </thead>
-          <tr>
-            <td>API</td>
-            <td>/api</td>
-          </tr>
+            <tr>
+              <td>this</td>
+              <td>/</td>
+            </tr>
         </table>
     )
   }

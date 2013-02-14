@@ -36,6 +36,7 @@ trait BootstrapWrapper extends Wrapper {
         </div>
         <footer class="footer">
           <div class="container">
+            <hr/>
             <p class="pull-right">
               <a href="#"><i class="icon-circle-arrow-up"></i></a>
             </p>

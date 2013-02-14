@@ -2,8 +2,11 @@ package org.brewpot
 
 import xml.NodeSeq
 
-trait Bootstrap {
+trait Wrapper {
+  def wrap(content: NodeSeq): NodeSeq
+}
 
+trait BootstrapWrapper extends Wrapper {
   def wrap(content: NodeSeq) = {
     <html>
       <head>

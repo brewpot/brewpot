@@ -13,7 +13,6 @@ object Build extends Build {
         name                := Settings.name,
         description         := Settings.description,
         scalaVersion        := Settings.scalaVersion,
-        crossScalaVersions  := Settings.crossScalaVersions,
         organization        := Settings.organization,
         version             := Settings.version,
         homepage            := Settings.homepage,
@@ -31,7 +30,6 @@ object Build extends Build {
     val name = "brewpot"
     val description = "Brewpot"
     val scalaVersion = "2.10.0"
-    val crossScalaVersions = Seq("2.10.0")
     val organization = "org.brewpot"
     val version = "1.0-SNAPSHOT"
     val homepage = Some(new URL("http://github.com/brewpot/brewpot"))

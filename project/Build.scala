@@ -56,7 +56,9 @@ object Build extends Build {
     val libraryDependencies = Seq(
       "net.databinder" %% "unfiltered" % "0.6.7",
       "net.databinder" %% "unfiltered-filter" % "0.6.7",
-      "net.databinder" %% "unfiltered-jetty" % "0.6.7"
+      "net.databinder" %% "unfiltered-jetty" % "0.6.7",
+      "org.json4s" %% "json4s-native" % "3.1.0",
+      "com.jteigen" %% "jsonpicklers" % "0.2-SNAPSHOT"
     )
   }
 

@@ -7,6 +7,7 @@ trait PlanModule extends PagePlan with FormulaPlan{
 import directives._, Directives._
 import unfiltered.request._
 import unfiltered.response._
+import xml.NodeSeq
 
 
 trait PagePlan extends CommonDirectives
@@ -17,26 +18,26 @@ trait PagePlan extends CommonDirectives
     case "/" =>
       for {
         _ <- getHtml
-      } yield Ok ~> HtmlContent ~> Html5(greet)
+      } yield Ok ~> HtmlContent ~> Html5(serve[Any, NodeSeq](Nil).get)
   }
 }
 
 trait FormulaPlan extends CommonDirectives {
   def formula = Intent {
-    case "/formula/calc/abv" =>
+    case "/calc/abv" =>
       for {
         o <- postJson[AbvCalc]
-      } yield (ResponseString(o.toString))
+      } yield (o)
   }
 }
 
-trait CommonDirectives {
-  def postJson[A : Parser] = for {
+trait CommonDirectives extends ServiceModule {
+  def postJson[A : BodyParser] = for {
     _ <- POST
     _ <- contentType("application/json")
     j <- commit(Body.string _)
-    c <- getOrElse(Parser[A].parse(j), BadRequest)
-  } yield (c)
+    c <- getOrElse(BodyParser[A].parseBody(j), BadRequest)
+  } yield (ResponseString(serve[A, Double](c).get.toString))
 
   val getHtml = for {
     _ <- GET

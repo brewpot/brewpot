@@ -1,13 +1,16 @@
 package org.brewpot
 
-import xml.NodeSeq
 
 trait ServiceModule extends HtmlWrapperModule
   with DataProviderModule {
 
-  val greet: NodeSeq
+  def serve[A, B](a: A): Option[B]
 }
 
 trait StaticService extends ServiceModule {
-  val greet: NodeSeq = wrap(<h1>{greetTitle}</h1><p>{greetContent}</p>)
+  val serve = Some(wrap(<h1>{greetTitle}</h1><p>{greetContent}</p>))
+}
+
+trait CalcService extends ServiceModule {
+  def serve(a: AbvCalc) = Some((a.og - a.fg) * 131)
 }

@@ -9,7 +9,7 @@ class Application extends Plan {
     with StaticService
     with BootstrapHtmlWrapper
     with StaticDataProvider
-//    with JsonParser
+    with CalcService
 
   // assemble all intents
   def intent = global.intent

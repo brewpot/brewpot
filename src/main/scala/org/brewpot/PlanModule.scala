@@ -9,31 +9,31 @@ import unfiltered.request._
 import unfiltered.response._
 import org.brewpot.Calculations.AbvCalc
 
-trait PagePlan extends CommonDirectives {
+trait PagePlan extends CommonDirectives with ViewServices {
 
   def index = Intent {
     case "/" =>
       for {
         _ <- getHtml
-      } yield (ViewService.greet)
+      } yield (greet)
   }
 }
 
-trait FormulaPlan extends CommonDirectives {
+trait FormulaPlan extends CommonDirectives with CalcServices {
   def formula = Intent {
     case "/calc/abv" =>
       for {
         o <- postJson[AbvCalc]
-      } yield (Services.abv(o))
+      } yield (abv(o))
   }
 }
 
 trait CommonDirectives {
-  def postJson[A : BodyParser] = for {
+  def postJson[A : Parseable] = for {
     _ <- POST
     _ <- contentType("application/json")
     j <- commit(Body.string _)
-    c <- getOrElse(BodyParser[A].parseBody(j), BadRequest)
+    c <- getOrElse(Parseable[A].parseBody(j), BadRequest)
   } yield (c)
 
   val getHtml = for {

@@ -12,19 +12,13 @@ import org.brewpot.Calculations.AbvCalc
 trait PagePlan extends CommonDirectives with ViewServices {
 
   def index = Intent {
-    case "/" =>
-      for {
-        _ <- getHtml
-      } yield (greet)
+    case "/" => for { _ <- getHtml } yield greet
   }
 }
 
 trait FormulaPlan extends CommonDirectives with CalcServices {
   def formula = Intent {
-    case "/calc/abv" =>
-      for {
-        o <- postJson[AbvCalc]
-      } yield (abv(o))
+    case "/calc/abv" => for { o <- postJson[AbvCalc] } yield abv(o)
   }
 }
 

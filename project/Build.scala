@@ -22,9 +22,10 @@ object Build extends Build {
         resolvers           ++= External.resolvers
     )
     ++ seq(StartScriptPlugin.startScriptForClassesSettings: _*)
-  ) dependsOn(ext)
+  ) dependsOn(unfilteredDirectivesExt) dependsOn(jsonpicklersExt)
 
-  lazy val ext = RootProject(uri("https://github.com/teigen/unfiltered-directives.git"))
+  lazy val unfilteredDirectivesExt = RootProject(uri("https://github.com/teigen/unfiltered-directives.git"))
+  lazy val jsonpicklersExt = RootProject(uri("https://github.com/kareblak/jsonpicklers.git"))
 
   object Settings {
     val name = "brewpot"
@@ -57,8 +58,7 @@ object Build extends Build {
       "net.databinder" %% "unfiltered" % "0.6.7",
       "net.databinder" %% "unfiltered-filter" % "0.6.7",
       "net.databinder" %% "unfiltered-jetty" % "0.6.7",
-      "org.json4s" %% "json4s-native" % "3.1.0",
-      "com.jteigen" %% "jsonpicklers" % "0.2-SNAPSHOT"
+      "org.json4s" %% "json4s-native" % "3.1.0"
     )
   }
 

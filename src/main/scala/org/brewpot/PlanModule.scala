@@ -7,18 +7,16 @@ trait PlanModule extends PagePlan with FormulaPlan{
 import directives._, Directives._
 import unfiltered.request._
 import unfiltered.response._
-import xml.NodeSeq
+import Bootstrap.wrap
+import org.brewpot.Calculations.AbvCalc
 
-
-trait PagePlan extends CommonDirectives
-  with ServiceModule
-  with HtmlWrapperModule {
+trait PagePlan extends CommonDirectives {
 
   def index = Intent {
     case "/" =>
       for {
         _ <- getHtml
-      } yield Ok ~> HtmlContent ~> Html5(serve[Any, NodeSeq](Nil).get)
+      } yield Ok ~> HtmlContent ~> Html5(wrap(<h1>Welcome to Brewpot!</h1>))
   }
 }
 
@@ -27,17 +25,17 @@ trait FormulaPlan extends CommonDirectives {
     case "/calc/abv" =>
       for {
         o <- postJson[AbvCalc]
-      } yield (o)
+      } yield (Services.abv(o))
   }
 }
 
-trait CommonDirectives extends ServiceModule {
+trait CommonDirectives {
   def postJson[A : BodyParser] = for {
     _ <- POST
     _ <- contentType("application/json")
     j <- commit(Body.string _)
     c <- getOrElse(BodyParser[A].parseBody(j), BadRequest)
-  } yield (ResponseString(serve[A, Double](c).get.toString))
+  } yield (c)
 
   val getHtml = for {
     _ <- GET

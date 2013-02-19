@@ -7,7 +7,6 @@ trait PlanModule extends PagePlan with FormulaPlan{
 import directives._, Directives._
 import unfiltered.request._
 import unfiltered.response._
-import Bootstrap.wrap
 import org.brewpot.Calculations.AbvCalc
 
 trait PagePlan extends CommonDirectives {
@@ -16,7 +15,7 @@ trait PagePlan extends CommonDirectives {
     case "/" =>
       for {
         _ <- getHtml
-      } yield Ok ~> HtmlContent ~> Html5(wrap(<h1>Welcome to Brewpot!</h1>))
+      } yield (ViewService.greet)
   }
 }
 

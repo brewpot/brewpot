@@ -12,7 +12,7 @@ import org.brewpot.Calculations.AbvCalc
 trait PagePlan extends CommonDirectives with ViewServices {
 
   def index = Intent {
-    case "/" => for { _ <- getHtml } yield greet
+    case "/" => for { _ <- getHtml } yield greetSvc
   }
 }
 

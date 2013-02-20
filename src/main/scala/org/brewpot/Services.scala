@@ -10,6 +10,6 @@ trait CalcServices {
   def abv(in: AbvCalc) = PlainTextContent ~> ResponseString(Calculations.abv(in).toString)
 }
 
-trait ViewServices extends DataProviderModule {
-  lazy val greet = Ok ~> HtmlContent ~> Html5(wrap(<h1>{greetTitle}</h1><p>{greetContent}</p>))
+trait ViewServices extends ViewModule {
+  lazy val greetSvc = Ok ~> HtmlContent ~> Html5(wrap(greet))
 }

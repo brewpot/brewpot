@@ -53,12 +53,15 @@ object Build extends Build {
 
   object External {
     val resolvers = Seq(
-      "typesafe repo" at "http://repo.typesafe.com/typesafe/releases/")
+      "sonatype repo" at "https://oss.sonatype.org/content/repositories/releases/",
+      "typesafe repo" at "http://repo.typesafe.com/typesafe/releases/"
+    )
     val libraryDependencies = Seq(
       "net.databinder" %% "unfiltered" % "0.6.7",
       "net.databinder" %% "unfiltered-filter" % "0.6.7",
       "net.databinder" %% "unfiltered-jetty" % "0.6.7",
-      "org.json4s" %% "json4s-native" % "3.1.0"
+      "org.json4s" %% "json4s-native" % "3.1.0",
+      "org.mongodb" %% "casbah" % "2.5.0"
     )
   }
 

@@ -8,7 +8,6 @@ class Application extends Plan {
   object global extends PlanModule
     with StaticDataView
     with MongoDbDataProvider
-    with HerokuConfiguration
 
   // assemble all intents
   def intent = global.intent

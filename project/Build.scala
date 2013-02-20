@@ -61,7 +61,8 @@ object Build extends Build {
       "net.databinder" %% "unfiltered-filter" % "0.6.7",
       "net.databinder" %% "unfiltered-jetty" % "0.6.7",
       "org.json4s" %% "json4s-native" % "3.1.0",
-      "org.mongodb" %% "casbah" % "2.5.0"
+      "org.mongodb" %% "casbah" % "2.5.0",
+      "org.clapper" %% "grizzled-slf4j" % "1.0.1"
     )
   }
 

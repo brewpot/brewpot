@@ -7,7 +7,7 @@ trait PlanModule extends PagePlan with FormulaPlan{
 import directives._, Directives._
 import unfiltered.request._
 import unfiltered.response._
-import org.brewpot.Calculations.AbvCalc
+import org.brewpot.Calculations._
 
 trait PagePlan extends CommonDirectives with ViewServices {
 
@@ -18,7 +18,9 @@ trait PagePlan extends CommonDirectives with ViewServices {
 
 trait FormulaPlan extends CommonDirectives with CalcServices {
   def formula = Intent {
-    case "/calc/abv" => for { o <- postJson[AbvCalc] } yield abv(o)
+    case "/calc/abv" => for { o <- postJson[AbvInput] } yield abv(o)
+    case "/calc/og" => for { o <- postJson[OgInput] } yield og(o)
+    case "/calc/attenuation" => for { o <- postJson[AbvInput] } yield attenuation(o)
   }
 }
 

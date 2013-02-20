@@ -1,18 +1,8 @@
 package org.brewpot
 
+import util.Properties
+
 trait ConfigurationModule {
-
-  trait Db {
-    val host: String
-    val port: Int
-  }
-
-}
-
-trait HerokuConfiguration extends ConfigurationModule {
-
-  trait Db {
-
-  }
-
+  val dbEnvVar: String
+  lazy val dbLocation: Option[String] = Properties.propOrNone(dbEnvVar)
 }

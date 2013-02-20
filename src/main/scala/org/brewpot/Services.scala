@@ -20,6 +20,9 @@ trait CalcServices {
     JsonContent ~> ResponseString(compact(render(json)))
 }
 
-trait ViewServices extends ViewModule {
-  lazy val greetSvc = Ok ~> HtmlContent ~> Html5(wrap(greet))
+trait ViewServices extends ViewModule with DataProviderModule {
+  lazy val greetResponse = Ok ~> HtmlContent ~> Html5(wrap(htmlGreet))
+  lazy val calcOgResponse = Ok ~> HtmlContent ~> Html5(wrap(htmlCalcOg))
+
+  def grainsResponse = Ok ~> HtmlContent ~> Html5(wrap(htmlGrains(fetchGrains)))
 }

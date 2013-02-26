@@ -13,14 +13,18 @@ trait MongoDbDataProvider extends DataProviderModule {
 
   import com.mongodb.casbah.Imports._
   import Templates._
-  val where = MongoDBObject
 
-  val mongoClient = Properties.envOrNone("MONGOLAB_URI").map(MongoClient(_)).getOrElse(MongoClient())
-  val mongoDb = mongoClient("brewpot")
+  private val where = MongoDBObject
 
-  def fetchGrains: Seq[Grain] = mongoDb("grains").find.map(grainTemplate).collect{case Some(g) => g}.toSeq
+  val MongoSetting(db) = Properties.envOrNone("MONGOLAB_URI")
 
-  def fetchHops: Seq[Hop] = mongoDb("hops").find.map(hopTemplate).collect{case Some(h) => h}.toSeq
+  def fetchGrains: Seq[Grain] = db("grains").find.map(grainTemplate).collect {
+    case Some(g) => g
+  }.toSeq
+
+  def fetchHops: Seq[Hop] = db("hops").find.map(hopTemplate).collect {
+    case Some(h) => h
+  }.toSeq
 
   object Templates {
     val grainTemplate = (g: DBObject) =>
@@ -35,4 +39,18 @@ trait MongoDbDataProvider extends DataProviderModule {
         aa <- h.getAs[Double]("alpha_acid")
       } yield Hop(n, aa)
   }
+
+  object MongoSetting {
+    def unapply(url: Option[String]): Option[MongoDB] = {
+      val regex = """mongodb://(\w+):(\w+)@([\w|\.]+):(\d+)/(\w+)""".r
+      url match {
+        case Some(regex(u, p, host, port, dbName)) =>
+          val db = MongoConnection(host, port.toInt)(dbName)
+          db.authenticate(u, p)
+          Some(db)
+        case _ => Some(MongoConnection("127.0.0.1", 27017)("test"))
+      }
+    }
+  }
+
 }

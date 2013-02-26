@@ -1,8 +1,8 @@
 package org.brewpot
 
 import xml.NodeSeq
-import org.brewpot.model.Grain
-import org.json4s.JsonAST.JValue
+import org.brewpot.model.{Hop, Grain}
+import org.json4s.JsonAST.{JArray, JValue}
 
 trait ViewModule {
   def htmlGreet: NodeSeq
@@ -10,6 +10,9 @@ trait ViewModule {
 
   def htmlGrains(grains: Seq[Grain]): NodeSeq
   def jsonGrains(grains: Seq[Grain]): JValue
+
+  def htmlHops(hops: Seq[Hop]): NodeSeq
+  def jsonHops(hops: Seq[Hop]): JValue
 }
 
 trait StaticDataView extends ViewModule {
@@ -49,7 +52,19 @@ trait DynamicDataView extends ViewModule {
       </tr>)}
     </table>
   }
-
-  def jsonGrains(grains: Seq[Grain]): JValue = Grain.json.pickle(grains.head)
+  def htmlHops(hops: Seq[Hop]): NodeSeq = {
+    <table class="table">
+      <tr>
+        <th>Name</th>
+        <th>Alpha acid (%)</th>
+      </tr>{hops.map(h =>
+      <tr>
+        <td>{h.name}</td>
+        <td>{h.alphaAcid}</td>
+      </tr>)}
+    </table>
+  }
+  def jsonGrains(grains: Seq[Grain]): JValue = JArray(grains.map(Grain.json.pickle(_)).toList)
+  def jsonHops(hops: Seq[Hop]): JValue = JArray(hops.map(Hop.json.pickle(_)).toList)
 
 }

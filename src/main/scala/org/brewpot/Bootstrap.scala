@@ -41,6 +41,19 @@ object Bootstrap {
                       </li>
                     </ul>
                   </li>
+                  <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                      Ingredients <b class="caret"></b>
+                    </a>
+                    <ul class="dropdown-menu" data-no-collapse="true">
+                      <li>
+                        <a href="/ingredients/fermentables">Fermentables</a>
+                      </li>
+                      <li>
+                        <a href="/ingredients/hops">Hops</a>
+                      </li>
+                    </ul>
+                  </li>
                 </ul>
               </div>
             </div>

@@ -9,9 +9,7 @@ import unfiltered.request._
 import unfiltered.response._
 import org.brewpot.Calculations._
 import org.brewpot.model.Grain
-import xml.NodeSeq
-import org.json4s.JsonAST.JValue
-import org.json4s.JsonAST.JNothing
+import org.brewpot.model.Hop
 
 trait PagePlan extends CommonDirectives with ViewServices {
 
@@ -23,14 +21,14 @@ trait PagePlan extends CommonDirectives with ViewServices {
   }
 }
 
-trait BrewPlan extends CommonDirectives with ViewServices with CalcServices {
-
-  type Grains = Seq[Grain]
-
+trait BrewPlan extends CommonDirectives with ViewServices {
   def ingredients = Intent {
     case "/ingredients/fermentables" => for {
-      x <- negotiate[Grains](GrainsNegotiator.html | GrainsNegotiator.json)
-    } yield x(fetchGrains)
+      f <- negotiate[Seq[Grain]](GrainsNegotiator.html | GrainsNegotiator.json)
+    } yield f(fetchGrains)
+    case "/ingredients/hops" => for {
+      f <- negotiate[Seq[Hop]](HopsNegotiator.html | HopsNegotiator.json)
+    } yield f(fetchHops)
   }
 }
 

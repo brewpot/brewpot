@@ -26,15 +26,87 @@ trait StaticDataView extends ViewModule {
   }
 
   val htmlCalcOg = {
-    <form class="form-inline">
-      <label class="input">
-        <b>OG</b> <input type="text" class="input-small" placeholder="1.050"/>
-      </label>
-      <label class="input">
-        <b>FG</b> <input type="text" class="input-small" placeholder="1.010"/>
-      </label>
-      <button type="submit" class="btn">Calculate</button>
-    </form>
+    <div class="container">
+      <h1>Brew Calculator</h1>
+      <p>Just give us whatever info you have, and we'll try to make something out of it</p>
+      <form class="form-inline form-pad">
+        <div class="input-append input-prepend">
+          <span class="add-on">OG</span>
+          <input type="text" class="input-mini" placeholder="1.050"/>
+        </div>
+        <div class="input-append input-prepend">
+          <span class="add-on">FG</span>
+          <input type="text" class="input-mini" placeholder="1.010"/>
+        </div>
+        <div class="input-append input-prepend">
+          <span class="add-on">ABV</span>
+          <input type="text" class="input-mini" placeholder="6.5"/>
+          <span class="add-on">%</span>
+        </div>
+        <div class="input-append input-prepend">
+          <span class="add-on">ABW</span>
+          <input type="text" class="input-mini" placeholder="8.125"/>
+          <span class="add-on">%</span>
+        </div>
+        <div class="input-append input-prepend">
+          <span class="add-on">Efficiency</span>
+          <input type="text" class="input-mini" placeholder="75"/>
+          <span class="add-on">%</span>
+        </div>
+        <div class="input-append input-prepend">
+          <span class="add-on">Attenuation</span>
+          <input type="text" class="input-mini" placeholder="75"/>
+          <span class="add-on">%</span>
+        </div>
+        <div class="input-append input-prepend">
+          <span class="add-on">Temperature</span>
+          <input type="text" class="input-mini" placeholder="25"/>
+          <span class="add-on">°C</span>
+        </div>
+        <div class="input-append input-prepend">
+          <span class="add-on">Calibration</span>
+          <input type="text" class="input-mini" placeholder="20"/>
+          <span class="add-on">°C</span>
+        </div>
+        <div class="input-append input-prepend">
+          <span class="add-on">BG</span>
+          <input type="text" class="input-mini" placeholder="1.060"/>
+          <span class="add-on">°C</span>
+        </div>
+        <div class="input-append input-prepend">
+          <span class="add-on">Boil volume</span>
+          <input type="text" class="input-mini" placeholder="23"/>
+          <span class="add-on">L</span>
+        </div>
+        <div class="input-append input-prepend">
+          <span class="add-on">Wort volume</span>
+          <input type="text" class="input-mini" placeholder="21"/>
+          <span class="add-on">L</span>
+        </div>
+        <div class="input-append input-prepend">
+          <span class="add-on">Priming sugar</span>
+          <input type="text" class="input-mini" placeholder="126"/>
+          <span class="add-on">g</span>
+        </div>
+        <div class="input-append input-prepend">
+          <span class="add-on">Beer type</span>
+          <select>
+            <option>British ale</option>
+            <option>Belgian ale</option>
+            <option>American beer</option>
+            <option>Fruit lambic</option>
+            <option>Porter and stout</option>
+            <option>European lager</option>
+            <option>Lambic</option>
+            <option>Wheat beer</option>
+          </select>
+        </div>
+        <div class="button-top">
+          <button type="reset" class="btn">Reset</button>
+          <button type="submit" class="btn">Calculate</button>
+        </div>
+      </form>
+    </div>
   }
 
 }

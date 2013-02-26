@@ -1,3 +1,12 @@
 .container-top {
     padding-top: 60px;
 }
+
+.button-top {
+    padding-top: 20px;
+}
+
+.form-pad > * {
+    padding-right: 8px;
+    padding-bottom: 8px;
+}

@@ -12,7 +12,6 @@ import org.brewpot.model.Grain
 import org.brewpot.model.Hop
 
 trait PagePlan extends CommonDirectives with ViewServices {
-
   def page = Intent {
     case "/"                  => for { _ <- htmlGet } yield greetResponse
     case "/calc/abv"          => for { _ <- htmlGet } yield Ok

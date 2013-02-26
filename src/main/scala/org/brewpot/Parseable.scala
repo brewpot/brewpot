@@ -2,7 +2,7 @@ package org.brewpot
 
 import org.json4s.native.JsonParser._
 import scala.Some
-import jsonpicklers.{Failure, Success}
+import jsonpicklers.{JsonObject, Failure, Success}
 import org.brewpot.Calculations._
 
 trait Parseable[A] {
@@ -13,24 +13,17 @@ trait Parseable[A] {
 object Parseable {
   def apply[A](implicit parser: Parseable[A]) = parser
 
-  implicit object AbvInputParser extends Parseable[AbvInput] {
-    def parseBody(json: String): Option[AbvInput] =
-      parseOpt(json).flatMap { p =>
-        AbvInput.json.unpickle(p) match {
-          case Success(v, _) => Some(v)
-          case Failure(m, _) => None
-        }
-      }
-  }
+  implicit object AbvInputParser extends InputParser[AbvInput](AbvInput.json)
 
-  implicit object OgInputParser extends Parseable[OgInput] {
-    def parseBody(json: String): Option[OgInput] =
+  implicit object OgInputParser extends InputParser[OgInput](OgInput.json)
+
+  class InputParser[A](j:JsonObject[A]) extends Parseable[A] {
+    def parseBody(json: String): Option[A] =
       parseOpt(json).flatMap { p =>
-        OgInput.json.unpickle(p) match {
+        j.unpickle(p) match {
           case Success(v, _) => Some(v)
-          case Failure(m, l) => println(l + " " + m); None
+          case Failure(m, l) => None
         }
       }
   }
 }
-

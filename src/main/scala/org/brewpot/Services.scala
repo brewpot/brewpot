@@ -5,10 +5,11 @@ import unfiltered.response._
 import org.brewpot.Calculations._
 import org.brewpot.Bootstrap._
 import unfiltered.response.Html5
-import unfiltered.response.ResponseString
 
-import org.json4s.native.JsonMethods._
+
+import org.brewpot.model.Grain
 import org.json4s.JsonAST
+import org.json4s.native.JsonMethods._
 
 
 trait CalcServices {
@@ -24,5 +25,8 @@ trait ViewServices extends ViewModule with DataProviderModule {
   lazy val greetResponse = Ok ~> HtmlContent ~> Html5(wrap(htmlGreet))
   lazy val calcOgResponse = Ok ~> HtmlContent ~> Html5(wrap(htmlCalcOg))
 
-  def grainsResponse = Ok ~> HtmlContent ~> Html5(wrap(htmlGrains(fetchGrains)))
+  object GrainsNegotiator extends Negotiator[Seq[Grain]] {
+    def html = negotiateHtml(htmlGrains)
+    def json = negotiateJson(jsonGrains)
+  }
 }

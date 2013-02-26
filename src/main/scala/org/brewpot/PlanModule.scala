@@ -8,6 +8,10 @@ import directives._, Directives._
 import unfiltered.request._
 import unfiltered.response._
 import org.brewpot.Calculations._
+import org.brewpot.model.Grain
+import xml.NodeSeq
+import org.json4s.JsonAST.JValue
+import org.json4s.JsonAST.JNothing
 
 trait PagePlan extends CommonDirectives with ViewServices {
 
@@ -19,9 +23,14 @@ trait PagePlan extends CommonDirectives with ViewServices {
   }
 }
 
-trait BrewPlan extends CommonDirectives with ViewServices {
+trait BrewPlan extends CommonDirectives with ViewServices with CalcServices {
+
+  type Grains = Seq[Grain]
+
   def brew = Intent {
-    case "/ingredients/fermentables" => for { _ <- getHtml } yield grainsResponse
+    case "/ingredients/fermentables" => for {
+      x <- getNegotiate[Grains](GrainsNegotiator.html | GrainsNegotiator.json)
+    } yield x(fetchGrains)
   }
 }
 
@@ -46,10 +55,12 @@ trait CommonDirectives {
     _ <- Accepts.Html
   } yield ()
 
-  val getNegotiate = for {
+  def getNegotiate[A](neg: Directive[Any, Any, A => ResponseFunction[Any]]) = for {
     _ <- GET
-    _ <- Accepts.Json | Accepts.Html
-  } yield ()
+    fa <- neg
+  } yield fa
 
 }
+
+case class Neg[A](directive: Directive[Any, Any, A => ResponseFunction[Any]])
 

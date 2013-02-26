@@ -2,12 +2,14 @@ package org.brewpot
 
 import xml.NodeSeq
 import org.brewpot.model.Grain
+import org.json4s.JsonAST.JValue
 
 trait ViewModule {
   def htmlGreet: NodeSeq
   def htmlCalcOg: NodeSeq
 
   def htmlGrains(grains: Seq[Grain]): NodeSeq
+  def jsonGrains(grains: Seq[Grain]): JValue
 }
 
 trait StaticDataView extends ViewModule {
@@ -47,4 +49,7 @@ trait DynamicDataView extends ViewModule {
       </tr>)}
     </table>
   }
+
+  def jsonGrains(grains: Seq[Grain]): JValue = Grain.json.pickle(grains.head)
+
 }

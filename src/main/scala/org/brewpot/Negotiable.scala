@@ -10,7 +10,7 @@ import unfiltered.response.Html5
 import unfiltered.response.ResponseString
 import directives._,Directives._
 
-trait Negotiator[A] {
+trait Negotiable[A] {
   def negotiateHtml(f: (A) => NodeSeq) = for {
     _ <- Accepts.Html
   } yield (a: A) => HtmlContent ~> Html5(wrap(f(a)))

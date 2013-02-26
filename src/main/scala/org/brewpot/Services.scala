@@ -25,7 +25,7 @@ trait ViewServices extends ViewModule with DataProviderModule {
   lazy val greetResponse = Ok ~> HtmlContent ~> Html5(wrap(htmlGreet))
   lazy val calcOgResponse = Ok ~> HtmlContent ~> Html5(wrap(htmlCalcOg))
 
-  object GrainsNegotiator extends Negotiator[Seq[Grain]] {
+  object GrainsNegotiator extends Negotiable[Seq[Grain]] {
     def html = negotiateHtml(htmlGrains)
     def json = negotiateJson(jsonGrains)
   }

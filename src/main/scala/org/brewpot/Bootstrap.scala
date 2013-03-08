@@ -3,7 +3,7 @@ package org.brewpot
 import xml.NodeSeq
 
 object Bootstrap {
-  def wrap(content: NodeSeq) = {
+  def wrap(content: Any) = {
     <html>
       <head>
         <title>

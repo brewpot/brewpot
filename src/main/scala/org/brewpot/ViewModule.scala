@@ -1,7 +1,6 @@
 package org.brewpot
 
 import xml.NodeSeq
-import org.brewpot.model.{Hop, Grain}
 import org.json4s.JsonAST.{JArray, JValue}
 
 trait ViewModule {
@@ -13,9 +12,11 @@ trait ViewModule {
 
   def htmlHops(hops: Seq[Hop]): NodeSeq
   def jsonHops(hops: Seq[Hop]): JValue
+
+  def recipeBuilderForm: NodeSeq
 }
 
-trait StaticDataView extends ViewModule {
+trait StaticDataView extends ViewModule with Snippets {
   val htmlGreet = {
     <h1>Welcome to Brewpot!</h1> ++
     <p>
@@ -109,6 +110,33 @@ trait StaticDataView extends ViewModule {
     </div>
   }
 
+  def recipeBuilderForm: NodeSeq = {
+    val defaultMalts = 4;
+    <div class="container">
+      <form>
+        <div class="controls">
+          <label><strong>Efficiency</strong></label>
+          <div class="input-append">
+            <input class="span1" type="text" id="efficiency" placeholder="72"/>
+            <span class="add-on">%</span>
+          </div>
+          <label><strong>Wort Volume</strong></label>
+          <div>
+            <div class="input-append">
+              <input class="span1" type="text" id="volume" placeholder="23"/>
+              <span class="add-on">liters</span>
+            </div>
+          </div>
+        </div>
+        <hr/>
+        {maltInput * defaultMalts}
+        <div class="controls">
+          <button type="submit span1" class="btn">Submit</button>
+          <button type="reset span1" class="btn">Reset</button>
+        </div>
+      </form>
+    </div>
+  }
 }
 
 trait DynamicDataView extends ViewModule {
@@ -136,7 +164,7 @@ trait DynamicDataView extends ViewModule {
       </tr>)}
     </table>
   }
-  def jsonGrains(grains: Seq[Grain]): JValue = JArray(grains.map(Grain.json.pickle(_)).toList)
-  def jsonHops(hops: Seq[Hop]): JValue = JArray(hops.map(Hop.json.pickle(_)).toList)
+  def jsonGrains(grains: Seq[Grain]): JValue = JArray(grains.map(GrainConverter.json.pickle(_)).toList)
+  def jsonHops(hops: Seq[Hop]): JValue = JArray(hops.map(HopConverter.json.pickle(_)).toList)
 
 }

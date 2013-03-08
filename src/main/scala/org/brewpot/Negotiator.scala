@@ -23,4 +23,5 @@ trait Negotiator[A] extends Negotiable[A] {
 trait Negotiable[A] {
   def html: Directive[Any, Any, A => ResponseFunction[Any]]
   def json: Directive[Any, Any, A => ResponseFunction[Any]]
+  def all = html | json
 }

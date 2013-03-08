@@ -1,19 +1,22 @@
 package org.brewpot
 
-object model {
-
-  import jsonpicklers.Picklers._
-
-  sealed trait Fermentable {
+  trait Fermentable {
     val potential: Double
   }
 
-  object Grain {
-    val json = wrap(apply)(unapply(_).get) {
-      ("name" :: string) ~
-        ("potential" :: double)
-    }
+  trait Ingredient {
+    val weight: Int
   }
+
+  trait BitteringSubstance {
+    val alphaAcid: Double
+  }
+
+  case class FermentableIngredient(potential: Double, weight: Int) extends Fermentable with Ingredient
+
+  case class BitteringIngredient(weight: Int, alphaAcid: Double) extends BitteringSubstance with Ingredient
+
+  case class Recipe(efficiency: Double, volume: Double, fermentables: Seq[FermentableIngredient])
 
   case class Grain(name: String, potential: Double) extends Fermentable
 
@@ -23,17 +26,4 @@ object model {
 
   case class Sugar(potential: Double) extends Fermentable
 
-  type Gram = Int
-
-  case class MaltBill(fermentableIngredients: Seq[(Gram, Fermentable)])
-
-  object Hop {
-    val json = wrap(apply)(unapply(_).get) {
-      ("name" :: string) ~
-        ("alpha_acid" :: double)
-    }
-  }
-
-  case class Hop(name: String, alphaAcid: Double)
-
-}
+  case class Hop(name: String, alphaAcid: Double) extends BitteringSubstance

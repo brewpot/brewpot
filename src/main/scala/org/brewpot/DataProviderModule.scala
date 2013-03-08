@@ -1,12 +1,12 @@
 package org.brewpot
 
-import org.brewpot.model._
 import util.Properties
 
 
 trait DataProviderModule {
   def fetchGrains: Seq[Grain]
   def fetchHops: Seq[Hop]
+  def storeRecipe(recipe: Recipe): Option[String]
 }
 
 trait MongoDbDataProvider extends DataProviderModule {
@@ -14,7 +14,7 @@ trait MongoDbDataProvider extends DataProviderModule {
   import com.mongodb.casbah.Imports._
   import Templates._
 
-  private val where = MongoDBObject
+  type where = MongoDBObject
 
   val MongoSetting(db) = Properties.envOrNone("MONGOLAB_URI")
 
@@ -25,6 +25,20 @@ trait MongoDbDataProvider extends DataProviderModule {
   def fetchHops: Seq[Hop] = db("hops").find.map(hopTemplate).collect {
     case Some(h) => h
   }.toSeq
+
+  def storeRecipe(recipe: Recipe): Option[String] = {
+    val dbObj =
+      MongoDBObject(
+        "efficiency"    -> recipe.efficiency,
+        "wort_volume"   -> recipe.volume,
+        "fermentables"  -> recipe.fermentables.map{ f =>
+          MongoDBObject(
+            "potential" -> f.potential,
+            "weight"    -> f.weight)
+        })
+    val res = db("recipes") += dbObj
+    dbObj.getAs[ObjectId]("_id").map(_.toString)
+  }
 
   object Templates {
     val grainTemplate = (g: DBObject) =>

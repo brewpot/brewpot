@@ -1,6 +1,6 @@
 package org.brewpot
 
-import jsonpicklers.Picklers._
+import jsonpicklers._, Picklers._
 
 object Calculations {
 
@@ -10,7 +10,7 @@ object Calculations {
 
   def og(in: OgInput) = OgOutput(
     in.fermentables.foldLeft(0.0) {(a, f) =>
-      a + (f.grams * (f.potential - 1))
+      a + (f.grams * (f.gravity - 1))
     } * 8.345404 * in.efficiency / in.wortVolume / 1000 + 1
   )
 
@@ -33,10 +33,10 @@ object Calculations {
     }
   }
 
-  case class FermableInput(potential: Double, grams: Int)
+  case class FermableInput(gravity: Double, grams: Int)
   object FermableInput {
     val json = wrap(apply)(unapply(_).get) {
-      ("potential" :: double) ~
+      ("gravity" :: double) ~
       ("grams" :: int)
     }
   }

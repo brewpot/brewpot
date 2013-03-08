@@ -7,10 +7,11 @@ import org.brewpot.Bootstrap._
 import unfiltered.response.Html5
 
 
-import org.brewpot.model.{Hop, Grain}
 import org.json4s.JsonAST
 import org.json4s.native.JsonMethods._
+import unfiltered.request._
 
+import directives._, Directives._
 
 trait CalcServices {
   def abv(in: AbvInput) = jsonResponse(AbvOutput.json.pickle(Calculations.abv(in)))
@@ -21,9 +22,34 @@ trait CalcServices {
     JsonContent ~> ResponseString(compact(render(json)))
 }
 
-trait ViewServices extends ViewModule with DataProviderModule {
+trait ViewServices extends ViewModule with DataProviderModule with CommonDirectives {
   lazy val greetResponse = Ok ~> HtmlContent ~> Html5(wrap(htmlGreet))
   lazy val calcOgResponse = Ok ~> HtmlContent ~> Html5(wrap(htmlCalcOg))
+
+  val getRecipeBuilder = for {
+    _ <- GET
+    _ <- Accepts.Html
+  } yield recipeBuilderForm
+
+  val postRecipe = for {
+    _ <- POST
+    _ <- RequestContentType === "application/json"
+  } yield storeRecipe(Recipe(0.72, 23, Seq(FermentableIngredient(1, 6)))).getOrElse("#YOLO")
+
+  val recipeBuilder = for {
+    res <- getRecipeBuilder | postRecipe
+  } yield Html5(wrap(res))
+
+  val fermentablesOverview = for {
+    _ <- GET
+    f <- GrainsNegotiator.all
+  } yield f(fetchGrains)
+
+  val hopsOverview = for {
+    _ <- GET
+    f <- HopsNegotiator.all
+  } yield f(fetchHops)
+
 
   object GrainsNegotiator extends Negotiator[Seq[Grain]] {
     def html = negotiateHtml(htmlGrains)

@@ -1,9 +1,8 @@
 package org.brewpot
 
 import org.json4s.native.JsonParser._
-import scala.Some
-import jsonpicklers.{JsonObject, Failure, Success}
 import org.brewpot.Calculations._
+import jsonpicklers._
 
 trait Parseable[A] {
   def parseBody(a: String): Option[A]
@@ -21,8 +20,8 @@ object Parseable {
     def parseBody(json: String): Option[A] =
       parseOpt(json).flatMap { p =>
         j.unpickle(p) match {
-          case Success(v, _) => Some(v)
-          case Failure(m, l) => None
+          case Result.Success(v, _) => Some(v)
+          case Result.Failure(m, l) => None
         }
       }
   }
